@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Star Wars Galaxy — v10</title>
+<link rel="preload" href="style.css" as="style">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hdr">
+  <div class="brand"><span class="sw">STAR WARS</span><span class="sub">GALAXY MAP</span></div>
+  <div class="controls">
+    <input id="search" type="search" placeholder="Search planets…" aria-label="Search planets">
+    <select id="regionFilter" aria-label="Jump to region">
+      <option value="">All regions</option>
+      <option>Deep Core</option><option>Core</option><option>Colonies</option>
+      <option>Inner Rim</option><option>Expansion Region</option>
+      <option>Mid Rim</option><option>Outer Rim</option><option>Unknown Regions</option>
+    </select>
+    <button id="togglePanel">List</button>
+    <button id="reset">Reset</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <canvas id="map"></canvas>
+
+  <!-- Edge grid labels -->
+  <div id="edgeLabels">
+    <div class="edge top"></div>
+    <div class="edge mid"></div>
+    <div class="edge bottom"></div>
+    <div class="edge left"></div>
+    <div class="edge right"></div>
+  </div>
+
+  <div id="coords">—</div>
+  <div id="legend">
+    <div class="legend-row">
+      <span class="swatch deepcore"></span>Deep Core
+      <span class="swatch core"></span>Core
+      <span class="swatch colonies"></span>Colonies
+      <span class="swatch inner"></span>Inner Rim
+    </div>
+    <div class="legend-row">
+      <span class="swatch exp"></span>Expansion
+      <span class="swatch mid"></span>Mid Rim
+      <span class="swatch outer"></span>Outer Rim
+      <span class="swatch unk"></span>Unknown Regions
+    </div>
+  </div>
+  <div id="routesBar"></div>
+</div>
+
+<aside id="panel" hidden class="panel">
+  <div class="head">
+    <h2>Planets</h2>
+    <button id="closePanel" class="btn">Close</button>
+  </div>
+  <ul id="list" class="list"></ul>
+</aside>
+
+<dialog id="details">
+  <form method="dialog" class="datapad">
+    <header class="dHead">
+      <div>
+        <span class="aure">AUREBESH DATAPAD</span>
+        <h3 id="dName">Planet</h3>
+      </div>
+      <div><span id="dRegion" class="tag">REGION</span> <button id="dClose" value="close" class="btn" aria-label="Close">×</button></div>
+    </header>
+    <div class="dBody">
+      <div class="meta">
+        <div><strong>Grid:</strong> <span id="dGrid"></span></div>
+        <div><strong>Famous:</strong> <span id="dFamous"></span></div>
+      </div>
+      <blockquote id="dQuote"></blockquote>
+      <cite id="dCite"></cite>
+      <p id="dNotes" class="notes"></p>
+      <div class="routes">
+        <div class="rHead">Trade routes</div>
+        <ul id="dRoutes"></ul>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<footer><small>v10 — asymmetric regions, region labels, tuned palette, smoother zoom, edge-only grid labels</small></footer>
+
+
+<script src="app.js"></script>
+</body></html>
