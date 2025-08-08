@@ -1,93 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <title>Star Wars Galaxy – Interactive Map (Prototype V4)</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Wars Galaxy Map - North Star V1</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Star&nbsp;Wars Galaxy</h1>
-    <div class="controls">
-      <input id="search" type="search" placeholder="Search planets…" aria-label="Search planets" autocomplete="off">
-      <button id="resetView" title="Reset view" aria-label="Reset view">Reset</button>
-      <button id="toggleList" title="Toggle list panel" aria-expanded="false" aria-controls="listPanel">List</button>
-    </div>
-  </header>
-
-  <main>
-    <section class="mapWrap">
-      <canvas id="map" aria-label="Galaxy map" role="img"></canvas>
-      <div class="legend" aria-hidden="true">
-        <div class="swatch deepcore"></div><span>Deep Core</span>
-        <div class="swatch core"></div><span>Core</span>
-        <div class="swatch colonies"></div><span>Colonies</span>
-        <div class="swatch inner"></div><span>Inner Rim</span>
-        <div class="swatch expansion"></div><span>Expansion Region</span>
-        <div class="swatch mid"></div><span>Mid Rim</span>
-        <div class="swatch outer"></div><span>Outer Rim</span>
-        <div class="swatch unknown"></div><span>Unknown Regions</span>
-      </div>
-      <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
-      <div id="coords" aria-hidden="true">—</div>
-    </section>
-
-    <aside id="listPanel" aria-label="Planet list" hidden>
-      <div class="listHead">
-        <h2>Planets</h2>
-        <div class="filters">
-          <select id="regionFilter" aria-label="Filter by region">
-            <option value="">All regions</option>
-            <option>Deep Core</option>
-            <option>Core</option>
-            <option>Colonies</option>
-            <option>Inner Rim</option>
-            <option>Expansion Region</option>
-            <option>Mid Rim</option>
-            <option>Outer Rim</option>
-            <option>Unknown Regions</option>
-          </select>
-          <select id="eraFilter" aria-label="Filter by era">
-            <option value="">All eras</option>
-            <option>Prequel</option>
-            <option>Original</option>
-            <option>Sequel</option>
-            <option>Clone Wars</option>
-            <option>Rebels</option>
-            <option>Mando Era</option>
-            <option>Legends</option>
-          </select>
-        </div>
-      </div>
-      <ul id="planetList" role="list"></ul>
-    </aside>
-  </main>
-
-  <dialog id="detailDialog" aria-label="Planet details">
-    <form method="dialog">
-      <header class="dialogHead">
-        <h3 id="planetName">Planet</h3>
-        <button value="close" aria-label="Close">✕</button>
-      </header>
-      <div class="dialogBody">
-        <dl>
-          <dt>Region</dt><dd id="planetRegion"></dd>
-          <dt>Sector</dt><dd id="planetSector"></dd>
-          <dt>Famous person</dt><dd id="planetFamous"></dd>
-          <dt>Trade route</dt><dd id="planetRoute"></dd>
-          <dt>Era</dt><dd id="planetEra"></dd>
-          <dt>Notes</dt><dd id="planetNotes"></dd>
-          <dt>Coords</dt><dd id="planetCoords"></dd>
-        </dl>
-      </div>
-    </form>
-  </dialog>
-
-  <footer>
-    <small>Prototype V4 — stylized sectors, clustered layout, grid overlay. Touch: drag to pan, pinch to zoom, tap to select. Mouse: drag to pan, wheel to zoom.</small>
-  </footer>
-
+  <canvas id="galaxy-map"></canvas>
+  <div id="planet-info" class="hidden">
+    <h2 id="planet-name"></h2>
+    <p><strong>Sector:</strong> <span id="planet-sector"></span></p>
+    <p><strong>Famous Person:</strong> <span id="planet-famous"></span></p>
+    <p><strong>Fact:</strong> <span id="planet-fact"></span></p>
+    <p><strong>Trade Route:</strong> <span id="planet-route"></span></p>
+    <button onclick="closeInfo()">Close</button>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>

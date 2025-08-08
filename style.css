@@ -1,61 +1,21 @@
-*{box-sizing:border-box}
-:root{
-  --ink:#e7f1ff; --muted:#9bb3d1;
-  --grid:#7f8aa1;
-  --deepcore: rgba(255,255,255,0.25);
-  --core: rgba(250,225,120,0.22);
-  --colonies: rgba(255,180,120,0.18);
-  --inner: rgba(255,150,200,0.12);
-  --expansion: rgba(170,255,210,0.10);
-  --mid: rgba(120,210,255,0.10);
-  --outer: rgba(140,200,255,0.07);
-  --unknown: rgba(200,160,255,0.08);
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at center, #001020 0%, #000010 100%);
+  overflow: hidden;
+  color: #fff;
+  font-family: sans-serif;
 }
-html,body{height:100%;margin:0;background:radial-gradient(1600px 1100px at 60% 15%, #0a1538 0%, #091330 55%, #061028 100%);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-header{display:flex;gap:1rem;align-items:center;padding:0.75rem 1rem;border-bottom:1px solid #14244b;background:linear-gradient(180deg,#0d1a42,#0a1534)}
-h1{font-size:1.1rem;margin:0;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
-.controls{display:flex;gap:.5rem;align-items:center;margin-left:auto}
-.controls input[type=search]{background:#0b1736;border:1px solid #192a4f;color:var(--ink);padding:.55rem .7rem;border-radius:.5rem;min-width:240px}
-.controls button{background:#0a1633;border:1px solid #1b2c53;color:var(--ink);padding:.55rem .8rem;border-radius:.5rem;cursor:pointer}
-.controls button:hover{border-color:#315894}
-
-main{display:grid;grid-template-columns:1fr auto;min-height:calc(100% - 56px)}
-.mapWrap{position:relative;overflow:hidden}
-#map{display:block;width:100%;height:calc(100vh - 56px)}
-
-.legend{position:absolute;left:12px;bottom:12px;background:rgba(7,13,30,.7);backdrop-filter:blur(2px);border:1px solid #16243f;padding:.5rem .6rem;border-radius:.5rem;display:grid;grid-template-columns:auto 1fr;gap:.25rem .5rem;align-items:center;max-width:60vw}
-.swatch{width:.75rem;height:.75rem;border-radius:50%;}
-.swatch.deepcore{background:var(--deepcore)}
-.swatch.core{background:var(--core)}
-.swatch.colonies{background:var(--colonies)}
-.swatch.inner{background:var(--inner)}
-.swatch.expansion{background:var(--expansion)}
-.swatch.mid{background:var(--mid)}
-.swatch.outer{background:var(--outer)}
-.swatch.unknown{background:var(--unknown)}
-
-#toast{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#0a1736;border:1px solid #1b2c53;color:var(--ink);padding:.35rem .6rem;border-radius:.4rem;opacity:0;transition:opacity .25s}
-#coords{position:absolute;top:10px;right:12px;color:var(--muted);font-size:.85rem;opacity:.9}
-
-aside{width:320px;max-width:90vw;border-left:1px solid #16243f;background:linear-gradient(180deg,#0a1736,#081330)}
-aside[hidden]{display:none}
-.listHead{display:flex;justify-content:space-between;align-items:center;padding:.75rem;border-bottom:1px solid #16243f}
-.filters{display:flex;gap:.5rem}
-.filters select{background:#0b1736;border:1px solid #192a4f;color:var(--ink);padding:.4rem .5rem;border-radius:.4rem}
-#planetList{list-style:none;margin:0;padding:.5rem;max-height:calc(100vh - 56px - 56px);overflow:auto}
-#planetList li{padding:.4rem .5rem;border-radius:.4rem;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:center;border:1px solid transparent}
-#planetList li:hover{background:#0d1c44;border-color:#1b2c53}
-#planetList small{color:var(--muted)}
-
-dialog{max-width:min(560px,92vw);border:1px solid #1b2c53;border-radius:.6rem;background:#0a1736;color:var(--ink)}
-.dialogHead{display:flex;justify-content:space-between;align-items:center;padding:.75rem;border-bottom:1px solid #16243f}
-.dialogBody{padding:.75rem}
-dt{color:var(--muted);font-weight:600}
-dd{margin:0 0 .5rem 0}
-
-footer{padding:.6rem 1rem;border-top:1px solid #16243f;color:var(--muted);background:#081330}
-
-@media (max-width: 900px){
-  main{grid-template-columns:1fr}
-  aside{position:fixed;right:0;top:56px;bottom:0;z-index:10}
+#galaxy-map {
+  display: block;
 }
+#planet-info {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 20, 0.9);
+  padding: 15px;
+  border: 1px solid #0ff;
+  border-radius: 8px;
+  width: 250px;
+}
+.hidden { display: none; }
