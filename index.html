@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <title>Star Wars Galaxy – Interactive Map (Prototype V3)</title>
+  <title>Star Wars Galaxy – Interactive Map (Prototype V4)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,10 +20,14 @@
     <section class="mapWrap">
       <canvas id="map" aria-label="Galaxy map" role="img"></canvas>
       <div class="legend" aria-hidden="true">
-        <div class="dot core"></div><span>Core</span>
-        <div class="dot mid"></div><span>Mid / Expansion</span>
-        <div class="dot outer"></div><span>Outer Rim</span>
-        <div class="dot unknown"></div><span>Unknown Regions</span>
+        <div class="swatch deepcore"></div><span>Deep Core</span>
+        <div class="swatch core"></div><span>Core</span>
+        <div class="swatch colonies"></div><span>Colonies</span>
+        <div class="swatch inner"></div><span>Inner Rim</span>
+        <div class="swatch expansion"></div><span>Expansion Region</span>
+        <div class="swatch mid"></div><span>Mid Rim</span>
+        <div class="swatch outer"></div><span>Outer Rim</span>
+        <div class="swatch unknown"></div><span>Unknown Regions</span>
       </div>
       <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="coords" aria-hidden="true">—</div>
@@ -35,10 +39,14 @@
         <div class="filters">
           <select id="regionFilter" aria-label="Filter by region">
             <option value="">All regions</option>
-            <option value="Core">Core</option>
-            <option value="Mid Rim">Mid / Expansion</option>
-            <option value="Outer Rim">Outer Rim</option>
-            <option value="Unknown Regions">Unknown Regions</option>
+            <option>Deep Core</option>
+            <option>Core</option>
+            <option>Colonies</option>
+            <option>Inner Rim</option>
+            <option>Expansion Region</option>
+            <option>Mid Rim</option>
+            <option>Outer Rim</option>
+            <option>Unknown Regions</option>
           </select>
           <select id="eraFilter" aria-label="Filter by era">
             <option value="">All eras</option>
@@ -70,14 +78,14 @@
           <dt>Trade route</dt><dd id="planetRoute"></dd>
           <dt>Era</dt><dd id="planetEra"></dd>
           <dt>Notes</dt><dd id="planetNotes"></dd>
-          <dt>Grid</dt><dd id="planetGrid"></dd>
+          <dt>Coords</dt><dd id="planetCoords"></dd>
         </dl>
       </div>
     </form>
   </dialog>
 
   <footer>
-    <small>Prototype V3 — grid-driven placement; approximate to canon. Touch: drag to pan, pinch to zoom, tap to select. Mouse: drag to pan, wheel to zoom.</small>
+    <small>Prototype V4 — stylized sectors, clustered layout, grid overlay. Touch: drag to pan, pinch to zoom, tap to select. Mouse: drag to pan, wheel to zoom.</small>
   </footer>
 
   <script src="app.js"></script>
