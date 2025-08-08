@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <title>Star Wars Galaxy – Interactive Map (Prototype)</title>
+  <title>Star Wars Galaxy – Interactive Map (Prototype V3)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1 aria-label="Star Wars Galaxy Interactive Map">Star&nbsp;Wars Galaxy</h1>
+    <h1>Star&nbsp;Wars Galaxy</h1>
     <div class="controls">
-      <input id="search" type="search" placeholder="Search planets… (e.g., Tatooine)" aria-label="Search planets" autocomplete="off">
+      <input id="search" type="search" placeholder="Search planets…" aria-label="Search planets" autocomplete="off">
       <button id="resetView" title="Reset view" aria-label="Reset view">Reset</button>
       <button id="toggleList" title="Toggle list panel" aria-expanded="false" aria-controls="listPanel">List</button>
     </div>
@@ -56,8 +56,28 @@
     </aside>
   </main>
 
+  <dialog id="detailDialog" aria-label="Planet details">
+    <form method="dialog">
+      <header class="dialogHead">
+        <h3 id="planetName">Planet</h3>
+        <button value="close" aria-label="Close">✕</button>
+      </header>
+      <div class="dialogBody">
+        <dl>
+          <dt>Region</dt><dd id="planetRegion"></dd>
+          <dt>Sector</dt><dd id="planetSector"></dd>
+          <dt>Famous person</dt><dd id="planetFamous"></dd>
+          <dt>Trade route</dt><dd id="planetRoute"></dd>
+          <dt>Era</dt><dd id="planetEra"></dd>
+          <dt>Notes</dt><dd id="planetNotes"></dd>
+          <dt>Grid</dt><dd id="planetGrid"></dd>
+        </dl>
+      </div>
+    </form>
+  </dialog>
+
   <footer>
-    <small>Prototype — approximate coordinates. Touch: drag to pan, pinch to zoom, tap to select. Mouse: drag to pan, wheel to zoom, click to select.</small>
+    <small>Prototype V3 — grid-driven placement; approximate to canon. Touch: drag to pan, pinch to zoom, tap to select. Mouse: drag to pan, wheel to zoom.</small>
   </footer>
 
   <script src="app.js"></script>

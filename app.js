@@ -1,8 +1,8 @@
-/* Star Wars Galaxy Map — holo-table pass
- * - Grid (C–U across, 1–21 down), readout on hover
- * - Blue holo look, star glints
- * - Region bands and region-tinted labels
- * - Approximate canon-like distribution
+/* Star Wars Galaxy Map — V3
+ * - Grid-driven placement C..U / 1..21
+ * - Initial zoom: shows a partial galaxy; clamp zoom-out to grid
+ * - Holo styling with spiral strokes & vignette
+ * - Region blobs + tinted labels
  */
 const CANVAS = document.getElementById('map');
 const ctx = CANVAS.getContext('2d', { alpha: false });
@@ -11,13 +11,16 @@ const coordsEl = document.getElementById('coords');
 const DPR = Math.max(1, window.devicePixelRatio || 1);
 let W = 0, H = 0;
 
+const GRID = { cols: 19, rows: 21, lettersStart: 'C'.charCodeAt(0) };
+
 const state = {
-  cx: 0, cy: 0, // world center
-  scale: 1.5,
+  // We'll compute world bounds from grid (0..cols, 0..rows) scaled to pixels
+  world: { minX: 0, minY: 0, maxX: GRID.cols, maxY: GRID.rows },
+  cx: GRID.cols/2, cy: GRID.rows/2,
+  scale: 60, // pixels per world unit; higher means more zoomed-in
   planets: [],
   hoverId: null,
   selectedId: null,
-  grid: { cols: 19, rows: 21, lettersStart: 'C'.charCodeAt(0) } // C..U, 1..21
 };
 
 // Colors
@@ -31,11 +34,25 @@ const COLORS = {
 
 // Load data
 fetch('planets.json').then(r => r.json()).then(data => {
-  state.planets = data;
-  fitViewToAll();
+  state.planets = data.map(p => withScreenMapping(p));
+  // Start zoomed-in near the core
+  state.cx = GRID.cols/2 + 1.2;
+  state.cy = GRID.rows/2;
+  state.scale = 95; // start zoomed in; see part of galaxy
+  resize();
   render();
   buildList();
 });
+
+function withScreenMapping(p){
+  // Convert grid cell (letter,row) to world coords.
+  // We'll allow intra-cell offsets if provided.
+  const col = (p.gridCol.charCodeAt(0) - GRID.lettersStart);
+  const row = (p.gridRow - 1);
+  const ox = p.offsetX || 0.5; // center within cell by default
+  const oy = p.offsetY || 0.5;
+  return { ...p, x: col + ox, y: row + oy };
+}
 
 // Resize
 function resize() {
@@ -48,102 +65,100 @@ function resize() {
   render();
 }
 window.addEventListener('resize', resize);
-resize();
 
 // World <-> Screen
 function worldToScreen(x, y) {
-  return [(x - state.cx) * state.scale + W/2, (y - state.cy) * state.scale + H/2];
+  return [ (x - state.cx) * state.scale + W/2, (y - state.cy) * state.scale + H/2 ];
 }
 function screenToWorld(x, y) {
-  return [(x - W/2)/state.scale + state.cx, (y - H/2)/state.scale + state.cy];
-}
-
-// Fit view to all points
-function fitViewToAll(pad=200) {
-  if (!state.planets.length) return;
-  let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
-  for (const p of state.planets) {
-    minX = Math.min(minX, p.x);
-    minY = Math.min(minY, p.y);
-    maxX = Math.max(maxX, p.x);
-    maxY = Math.max(maxY, p.y);
-  }
-  const worldW = maxX - minX;
-  const worldH = maxY - minY;
-  const sx = (W - pad) / worldW;
-  const sy = (H - pad) / worldH;
-  state.scale = Math.max(0.35, Math.min(sx, sy));
-  state.cx = (minX + maxX) / 2;
-  state.cy = (minY + maxY) / 2;
+  return [ (x - W/2)/state.scale + state.cx, (y - H/2)/state.scale + state.cy ];
 }
 
 // Rendering
 function render() {
-  // background
   drawBackground();
-
-  // region bands
   drawRegions();
-
-  // grid
   drawGrid();
-
-  // planets
   drawPlanets();
-
-  // labels
   drawLabels();
 }
 
 function drawBackground(){
-  // blue gradient already from CSS; add stars + subtle scanlines
   ctx.clearRect(0,0,W,H);
-  const rng = mulberry32(4242);
+  // vignette
+  const g = ctx.createRadialGradient(W*0.5,H*0.45,10,W*0.5,H*0.5,Math.max(W,H)*0.8);
+  g.addColorStop(0,'rgba(20,40,90,0.2)');
+  g.addColorStop(1,'rgba(0,0,0,0.9)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H);
+
+  // subtle scanlines
+  ctx.globalAlpha = .05;
+  for (let y=0; y<H; y+=3){ ctx.fillStyle = '#000'; ctx.fillRect(0,y,W,1); }
+  ctx.globalAlpha = 1;
+
+  // spiral strokes
   ctx.save();
-  for (let i=0;i<280;i++){
+  ctx.strokeStyle = 'rgba(120,170,255,0.08)';
+  ctx.lineWidth = 2;
+  const [cx, cy] = worldToScreen(GRID.cols/2, GRID.rows/2+0.2);
+  for(let arm=0; arm<4; arm++){
+    ctx.beginPath();
+    for(let t=0; t<Math.PI*2.2; t+=0.08){
+      const r = 40 + 12*t;
+      const x = cx + Math.cos(t + arm*Math.PI/2)*r;
+      const y = cy + Math.sin(t + arm*Math.PI/2)*r*0.75;
+      if (t===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // star glints
+  const rng = mulberry32(7331);
+  ctx.save();
+  for (let i=0;i<220;i++){
     const x = rng()*W, y = rng()*H;
-    const r = Math.max(0.4, rng()*1.6);
-    const a = 0.3 + rng()*0.6;
-    ctx.fillStyle = `rgba(240,250,255,${a})`;
+    const r = Math.max(0.3, rng()*1.2);
+    ctx.fillStyle = `rgba(240,250,255,${0.3 + rng()*0.5})`;
     ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-    if (rng() > 0.85){
-      // glint
-      ctx.globalAlpha = 0.35;
-      ctx.beginPath(); ctx.moveTo(x-6,y); ctx.lineTo(x+6,y); ctx.strokeStyle='rgba(180,220,255,.35)'; ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x,y-6); ctx.lineTo(x,y+6); ctx.stroke();
+    if (rng() > 0.88){
+      ctx.globalAlpha = 0.3;
+      ctx.beginPath(); ctx.moveTo(x-5,y); ctx.lineTo(x+5,y); ctx.strokeStyle='rgba(190,220,255,.35)'; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x,y-5); ctx.lineTo(x,y+5); ctx.stroke();
       ctx.globalAlpha = 1;
     }
   }
-  // scanlines
-  ctx.globalAlpha = .06;
-  for (let y=0; y<H; y+=3){
-    ctx.fillStyle = '#000'; ctx.fillRect(0,y,W,1);
-  }
-  ctx.globalAlpha = 1;
   ctx.restore();
 }
 
 function drawRegions(){
-  const [cx, cy] = worldToScreen(state.cx, state.cy);
-  const radii = [120, 240, 380, 540]; // Core -> Mid -> Outer
-  const colors = [
-    'rgba(94, 198, 255, 0.10)',
-    'rgba(80, 255, 180, 0.06)',
-    'rgba(255, 190, 130, 0.05)'
+  const [cx, cy] = worldToScreen(GRID.cols/2+0.1, GRID.rows/2+0.2);
+  // Elliptical-ish blobs using scaled circles
+  const ellipses = [
+    { r: 90,  sx: 0.45, sy: 0.45, fill:'rgba(94,198,255,0.12)' }, // Core/Deep
+    { r: 150, sx: 0.55, sy: 0.55, fill:'rgba(80,255,180,0.08)' }, // Mid/Expansion
+    { r: 230, sx: 0.75, sy: 0.70, fill:'rgba(255,190,130,0.06)' } // Outer
   ];
-  for (let i=0;i<radii.length;i++){
-    ctx.beginPath();
-    ctx.fillStyle = colors[i];
-    ctx.arc(cx, cy, radii[i], 0, Math.PI*2);
-    ctx.fill();
-  }
-  // Unknown Regions (soft wedge on the far left)
   ctx.save();
-  ctx.fillStyle = 'rgba(190, 160, 255, 0.05)';
+  ellipses.forEach(e=>{
+    ctx.beginPath();
+    ctx.translate(cx, cy);
+    ctx.scale(e.sx, e.sy);
+    ctx.arc(0,0,e.r,0,Math.PI*2);
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.fillStyle = e.fill;
+    ctx.fill();
+  });
+  ctx.restore();
+
+  // Unknown Regions wedge on left
+  ctx.save();
+  ctx.fillStyle = 'rgba(190, 160, 255, 0.06)';
   ctx.beginPath();
   ctx.moveTo(0,0);
-  ctx.lineTo(W*0.22,0);
-  ctx.lineTo(W*0.28,H);
+  ctx.lineTo(W*0.23,0);
+  ctx.lineTo(W*0.30,H);
   ctx.lineTo(0,H);
   ctx.closePath();
   ctx.fill();
@@ -151,50 +166,40 @@ function drawRegions(){
 }
 
 function drawGrid(){
-  // Define world bounds to map to C..U (19 cols) and 1..21 (rows)
-  // Use bbox of data expanded a bit
-  let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
-  for (const p of state.planets) {
-    minX = Math.min(minX, p.x);
-    minY = Math.min(minY, p.y);
-    maxX = Math.max(maxX, p.x);
-    maxY = Math.max(maxY, p.y);
-  }
-  const pad = 40;
-  minX -= pad; maxX += pad; minY -= pad; maxY += pad;
+  const minX = state.world.minX, minY = state.world.minY;
+  const maxX = state.world.maxX, maxY = state.world.maxY;
 
-  const cols = state.grid.cols; // 19 => C..U
-  const rows = state.grid.rows; // 21 => 1..21
-
-  // vertical lines
-  for (let c=0;c<=cols;c++){
-    const wx = minX + (c/cols)*(maxX-minX);
+  // vertical lines + letters
+  for (let c=0;c<=GRID.cols;c++){
+    const wx = c;
     const [sx0, sy0] = worldToScreen(wx, minY);
     const [sx1, sy1] = worldToScreen(wx, maxY);
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(150,165,190,0.18)';
+    ctx.strokeStyle = 'rgba(150,165,190,0.22)';
     ctx.lineWidth = 1;
     ctx.moveTo(sx0, sy0); ctx.lineTo(sx1, sy1); ctx.stroke();
-    if (c<cols){
-      const letter = String.fromCharCode(state.grid.lettersStart + c);
-      ctx.fillStyle = 'rgba(220,235,255,0.8)';
+    if (c<GRID.cols){
+      const letter = String.fromCharCode(GRID.lettersStart + c);
+      ctx.fillStyle = 'rgba(220,235,255,0.9)';
       ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
       ctx.fillText(letter, sx0 + 6, sy0 + 6);
+      ctx.fillText(letter, sx0 + 6, sy1 - 18);
     }
   }
-  // horizontal lines
-  for (let r=0;r<=rows;r++){
-    const wy = minY + (r/rows)*(maxY-minY);
+  // horizontal lines + numbers
+  for (let r=0;r<=GRID.rows;r++){
+    const wy = r;
     const [sx0, sy0] = worldToScreen(minX, wy);
     const [sx1, sy1] = worldToScreen(maxX, wy);
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(150,165,190,0.18)';
+    ctx.strokeStyle = 'rgba(150,165,190,0.22)';
     ctx.lineWidth = 1;
     ctx.moveTo(sx0, sy0); ctx.lineTo(sx1, sy1); ctx.stroke();
-    if (r<rows){
-      ctx.fillStyle = 'rgba(220,235,255,0.8)';
+    if (r<GRID.rows){
+      ctx.fillStyle = 'rgba(220,235,255,0.9)';
       ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
-      ctx.fillText(String(r+1), sx0 + 22, sy0 + 6);
+      ctx.fillText(String(r+1), sx0 + 26, sy0 + 6);
+      ctx.fillText(String(r+1), sx1 - 34, sy0 + 6);
     }
   }
 
@@ -202,9 +207,9 @@ function drawGrid(){
   CANVAS.onmousemove = (e)=>{
     const rect = CANVAS.getBoundingClientRect();
     const [wx, wy] = screenToWorld(e.clientX - rect.left, e.clientY - rect.top);
-    const col = Math.min(cols-1, Math.max(0, Math.floor((wx - minX) / (maxX - minX) * cols)));
-    const row = Math.min(rows-1, Math.max(0, Math.floor((wy - minY) / (maxY - minY) * rows)));
-    const letter = String.fromCharCode(state.grid.lettersStart + col);
+    const col = Math.min(GRID.cols-1, Math.max(0, Math.floor(wx)));
+    const row = Math.min(GRID.rows-1, Math.max(0, Math.floor(wy)));
+    const letter = String.fromCharCode(GRID.lettersStart + col);
     coordsEl.textContent = `${letter}-${row+1}`;
   };
 }
@@ -215,14 +220,17 @@ function drawPlanets(){
     const [sx, sy] = worldToScreen(p.x, p.y);
     if (sx < -20 || sy < -20 || sx > W+20 || sy > H+20) continue;
 
-    const size = Math.max(4, 7 - (0.002 * distanceScreenToCenter(sx,sy)));
+    const size = 4.5;
     const isSel = state.selectedId === p.id;
     const isHover = state.hoverId === p.id;
 
     ctx.beginPath();
     ctx.fillStyle = regionColor(p.region);
+    ctx.shadowColor = ctx.fillStyle;
+    ctx.shadowBlur = 6;
     ctx.arc(sx, sy, size, 0, Math.PI*2);
     ctx.fill();
+    ctx.shadowBlur = 0;
 
     if (isSel || isHover){
       ctx.beginPath();
@@ -243,15 +251,13 @@ function drawLabels(){
   for (const p of state.planets) {
     const [sx, sy] = worldToScreen(p.x, p.y);
     if (sx < -40 || sy < -40 || sx > W+40 || sy > H+40) continue;
-    if (state.scale < 0.8 && !isImportant(p)) continue;
+    if (state.scale < 70 && !isImportant(p)) continue; // declutter when zoomed out
 
     const label = p.name;
-    const ox = 10, oy = -2;
-    // outer glow stroke
+    const ox = 8, oy = -2;
     ctx.strokeStyle = 'rgba(5,16,36,.9)';
     ctx.lineWidth = 4;
     ctx.strokeText(label, sx+ox, sy+oy);
-    // tint fill by region
     ctx.fillStyle = tintForRegion(p.region);
     ctx.fillText(label, sx+ox, sy+oy);
   }
@@ -271,12 +277,6 @@ function tintForRegion(region){
 function isImportant(p){
   const famous = new Set(['Coruscant','Tatooine','Naboo','Hoth','Endor','Dagobah','Mustafar','Bespin','Alderaan','Kamino','Jakku','Mandalore','Yavin IV','Scarif']);
   return famous.has(p.name);
-}
-
-function distanceScreenToCenter(x,y){
-  const dx = x - W/2;
-  const dy = y - H/2;
-  return Math.hypot(dx,dy);
 }
 
 // Interaction: mouse
@@ -370,8 +370,10 @@ function pan(dx,dy){
 
 function zoomAt(mx,my, factor){
   const [wx, wy] = screenToWorld(mx,my);
+  const prev = state.scale;
   state.scale *= factor;
-  state.scale = Math.max(0.25, Math.min(6, state.scale));
+  // clamp zoom to not go beyond grid extents
+  state.scale = Math.max(45, Math.min(180, state.scale));
   const [wx2, wy2] = screenToWorld(mx,my);
   state.cx += (wx - wx2);
   state.cy += (wy - wy2);
@@ -380,7 +382,7 @@ function zoomAt(mx,my, factor){
 
 function pickPlanet(mx,my){
   let hitId = null;
-  let bestDist = 18;
+  let bestDist = 14;
   for (const p of state.planets){
     const [sx, sy] = worldToScreen(p.x, p.y);
     const d = Math.hypot(mx - sx, my - sy);
@@ -399,19 +401,25 @@ function showDetails(p){
   const dlg = document.getElementById('detailDialog');
   document.getElementById('planetName').textContent = p.name;
   document.getElementById('planetRegion').textContent = p.region || '—';
-  document.getElementById('planetAffiliation').textContent = p.affiliation || '—';
+  document.getElementById('planetSector').textContent = p.sector || '—';
+  document.getElementById('planetFamous').textContent = p.famous || '—';
+  document.getElementById('planetRoute').textContent = (p.tradeRoutes||[]).join(', ') || '—';
   document.getElementById('planetEra').textContent = p.era || '—';
   document.getElementById('planetNotes').textContent = p.notes || '—';
-  document.getElementById('planetCoords').textContent = `x ${p.x.toFixed(1)}, y ${p.y.toFixed(1)}`;
+  document.getElementById('planetGrid').textContent = `${p.gridCol}-${p.gridRow}`;
   if (typeof dlg.showModal === 'function'){ dlg.showModal(); }
 }
 
-document.getElementById('resetView').addEventListener('click', ()=>{ fitViewToAll(); render(); });
+document.getElementById('resetView').addEventListener('click', ()=>{
+  state.cx = GRID.cols/2 + 1.2;
+  state.cy = GRID.rows/2;
+  state.scale = 95;
+  render();
+});
 document.getElementById('toggleList').addEventListener('click', (e)=>{
   const panel = document.getElementById('listPanel');
   const isHidden = panel.hasAttribute('hidden');
-  if (isHidden){ panel.removeAttribute('hidden'); }
-  else { panel.setAttribute('hidden',''); }
+  if (isHidden){ panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden',''); }
   e.currentTarget.setAttribute('aria-expanded', String(isHidden));
 });
 
@@ -439,10 +447,10 @@ function refreshList(){
 
   for (const p of items){
     const li = document.createElement('li');
-    li.innerHTML = `<span>${p.name}</span><small>${p.region || ''}</small>`;
+    li.innerHTML = `<span>${p.name}</span><small>${p.region || ''} · ${p.gridCol}-${p.gridRow}</small>`;
     li.addEventListener('click',()=>{
       state.selectedId = p.id;
-      flyTo(p.x, p.y, 1.6);
+      flyTo(p.x, p.y, 110);
       showDetails(p);
     });
     list.appendChild(li);
@@ -452,7 +460,7 @@ function refreshList(){
 function flyTo(x,y, targetScale){
   const steps = 16;
   const start = { cx: state.cx, cy: state.cy, scale: state.scale };
-  const end = { cx: x, cy: y, scale: Math.max(state.scale, targetScale || state.scale) };
+  const end = { cx: x, cy: y, scale: Math.min(160, Math.max(state.scale, targetScale || state.scale)) };
   let t=0;
   function step(){
     t++;
