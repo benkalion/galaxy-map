@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Star Wars Galaxy — v7</title>
+<style>
+/* v7 styles */
+:root{
+  --bg:#071a3a; --grid:#20426e; --panel:#0a1f46d9;
+  --text:#e7eefc; --muted:#97a7c6; --accent:#6dd3ff;
+  --deep:#fbe27a; --core:#ff9bd3; --colonies:#e6a864; --inner:#74a2ff; --exp:#70ead1;
+  --mid:#5bb4ff; --outer:#3f67ff; --unk:#c2b0ff;
+}
+*{box-sizing:border-box} html,body{height:100%;margin:0;background:radial-gradient(1200px 800px at 20% -10%, #0c2b64 0%, #071a3a 45%, #05142a 70%, #020a1a 100%) fixed;color:var(--text);font:15px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Cantarell, Arial}
+header{position:fixed;top:12px;left:16px;right:16px;z-index:10;display:flex;gap:12px;align-items:center}
+.brand{display:flex;flex-direction:column;font-weight:800;letter-spacing:.08em}
+.brand .sw{font-size:16px}
+.brand .sub{font-size:12px;color:var(--muted);margin-top:-2px}
+.controls{margin-left:auto;display:flex;gap:8px;align-items:center;background:linear-gradient(180deg,#0d2a5c, #0b234c);padding:8px 10px;border-radius:10px;border:1px solid #12396c;backdrop-filter: blur(5px)}
+.controls input,.controls select,.controls button{background:#0a2148;border:1px solid #1b3e74;color:var(--text);padding:8px 10px;border-radius:8px}
+.controls input{min-width:220px}
+.controls button{cursor:pointer}
+.wrap{position:fixed;inset:0;overflow:hidden}
+#map{position:absolute;inset:0;width:100%;height:100%}
+#coords{position:fixed;right:12px;bottom:12px;opacity:.8;font-size:12px;color:var(--muted)}
+#legend{position:fixed;left:12px;bottom:12px;background:var(--panel);padding:10px 12px;border-radius:12px;border:1px solid #1b3f78;backdrop-filter: blur(6px)}
+.legend-row{display:flex;gap:12px;align-items:center;margin:2px 0}
+.swatch{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;box-shadow:0 0 8px rgba(255,255,255,.12)}
+.swatch.deepcore{background:var(--deep)} .swatch.core{background:var(--core)}
+.swatch.colonies{background:var(--colonies)} .swatch.inner{background:var(--inner)}
+.swatch.exp{background:var(--exp)} .swatch.mid{background:var(--mid)}
+.swatch.outer{background:var(--outer)} .swatch.unk{background:var(--unk)}
+#routesBar{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;flex-wrap:wrap;max-width:80vw;justify-content:center}
+.routeTag{background:#0a2148;border:1px solid #2b4d86;border-radius:100px;padding:6px 10px;color:var(--text);cursor:pointer}
+.routeTag.active{box-shadow:0 0 12px rgba(255,255,255,.15), 0 0 0 1px #fff inset}
+#overlay{position:absolute;right:28px;top:50%;transform:translateY(-50%);background:#0a2148;border:1px solid #1b3e74;padding:8px 12px;border-radius:10px;color:#d5e6ff}
+aside#panel{position:fixed;right:10px;top:70px;bottom:10px;width:300px;background:var(--panel);border:1px solid #1b3f78;border-radius:14px;backdrop-filter: blur(6px);overflow:auto}
+aside .head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #163a65}
+aside h2{margin:0;font-size:16px}
+#list{list-style:none;margin:0;padding:6px 10px}
+#list li{padding:6px 0;border-bottom:1px dotted #1b3e74;cursor:pointer}
+dialog{border:none;background:transparent}
+.datapad{width:min(420px,90vw);background:#091e41f0;border:1px solid #58f1ff;border-radius:14px;box-shadow:0 10px 50px rgba(0,0,0,.5), 0 0 20px #00ffe64d;overflow:hidden}
+.dHead{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#0c2a5a,#07224a);border-bottom:1px solid #1a4378;padding:8px 10px}
+.aure{font-family:monospace;color:#8fe8ff;letter-spacing:.2em;font-size:11px;opacity:.9}
+.dHead h3{margin:2px 0 0;font-size:20px}
+.tag{font-size:11px; padding:2px 8px;border-radius:100px;border:1px solid #2b5d9a;margin-left:6px;background:#0a2a5c}
+.dBody{padding:10px 12px;max-height:60vh;overflow:auto}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;color:#cbe2ff}
+blockquote{margin:8px 0;padding:6px 10px;border-left:3px solid #58f1ff;color:#eaf7ff;opacity:.95}
+.notes{color:#d7e7ff}
+.rHead{margin-top:8px;font-size:12px;color:#a8c7ff}
+#edgeGrid{position:absolute;inset:0;pointer-events:none;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr}
+.edge-labels{ color:#8fb6ff; font-size:12px; user-select:none }
+.edge-top,.edge-bottom{grid-column:1 / 4;display:flex;justify-content:space-between;padding:0 18vw}
+.edge-left,.edge-right{grid-row:1 / 4;display:flex;flex-direction:column;justify-content:space-between;padding:18vh 0; align-items:center}
+@media (max-width:760px){ .controls input{min-width:140px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="sw">STAR WARS</span><span class="sub">GALAXY MAP</span></div>
+  <div class="controls">
+    <input id="search" type="search" placeholder="Search planets…" aria-label="Search planets">
+    <select id="regionFilter" aria-label="Jump to region">
+      <option value="">All regions</option>
+      <option>Deep Core</option><option>Core</option><option>Colonies</option>
+      <option>Inner Rim</option><option>Expansion Region</option>
+      <option>Mid Rim</option><option>Outer Rim</option><option>Unknown Regions</option>
+    </select>
+    <button id="reset" onclick="location.reload()">Reset</button>
+  </div>
+</header>
+<div class="wrap">
+  <canvas id="map"></canvas>
+  <div id="coords">—</div>
+  <div id="legend">
+    <div class="legend-row">
+      <span class="swatch deepcore"></span>Deep Core
+      <span class="swatch core"></span>Core
+      <span class="swatch colonies"></span>Colonies
+      <span class="swatch inner"></span>Inner Rim
+    </div>
+    <div class="legend-row">
+      <span class="swatch exp"></span>Expansion
+      <span class="swatch mid"></span>Mid Rim
+      <span class="swatch outer"></span>Outer Rim
+      <span class="swatch unk"></span>Unknown Regions
+    </div>
+  </div>
+  <div id="routesBar"></div>
+  <div id="overlay"><span id="ovText">Loading…</span></div>
+</div>
+<aside id="panel" hidden>
+  <div class="head"><h2>Planets</h2><button id="closePanel">×</button></div>
+  <ul id="list"></ul>
+</aside>
+
+<dialog id="details">
+  <form method="dialog" class="datapad">
+    <header class="dHead">
+      <div class="title">
+        <div class="aure">AUREBESH DATAPAD</div>
+        <h3 id="dName">Planet</h3>
+        <span id="dRegionTag" class="tag">REGION</span>
+      </div>
+      <button value="close" aria-label="Close">×</button>
+    </header>
+    <div class="dBody">
+      <div class="meta">
+        <div><span>Grid:</span> <strong id="dGrid"></strong></div>
+        <div><span>Famous:</span> <strong id="dFamous"></strong></div>
+      </div>
+      <blockquote id="dQuote"></blockquote>
+      <p id="dNotes" class="notes"></p>
+      <div class="routes">
+        <div class="rHead">Trade routes</div>
+        <ul id="dRoutes"></ul>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<footer>
+  <small>v7 — deep zoom, dynamic grid, asymmetric Unknown Regions, clickable routes, enriched popups</small>
+  <div class="footer-actions"><button id="togglePanel">List</button></div>
+</footer>
+
+<script>
+
+// v7 single-file app — embedded data, deep initial zoom, dynamic grid, clickable routes, enhanced popups
+const DATA = {"planets": [{"name": "Coruscant", "x": 40, "y": -20, "region": "Core", "famous": "Sheev Palpatine", "quote": "I am the Senate.", "by": "Palpatine", "trivia": "Ecumenopolis capital of the Galactic Republic and later the Empire; home of the Jedi Temple.", "routes": ["Perlemian Trade Route", "Corellian Run", "Hydian Way"]}, {"name": "Alderaan", "x": -60, "y": -40, "region": "Core", "famous": "Bail Organa", "quote": "You may fire when ready.", "by": "Grand Moff Tarkin", "trivia": "Peaceful Core world destroyed by the first Death Star during the Galactic Civil War.", "routes": ["Perlemian Trade Route"]}, {"name": "Corellia", "x": 120, "y": -30, "region": "Core", "famous": "Han Solo", "quote": "Never tell me the odds.", "by": "Han Solo", "trivia": "Shipbuilding powerhouse; birthplace of the Millennium Falcon and CEC.", "routes": ["Corellian Run", "Corellian Trade Spine"]}, {"name": "Chandrila", "x": -10, "y": -60, "region": "Core", "famous": "Mon Mothma", "quote": "I show you the stone in my hand. You miss it because you're looking for a whole army.", "by": "Luthen Rael", "trivia": "Birthplace of Mon Mothma; a founding world of the New Republic.", "routes": ["Perlemian Trade Route"]}, {"name": "Naboo", "x": 220, "y": 120, "region": "Mid Rim", "famous": "Padm\u00e9 Amidala", "quote": "So this is how liberty dies\u2026 with thunderous applause.", "by": "Padm\u00e9 Amidala", "trivia": "Lush Mid Rim world; home to the Gungans and Theed; represented by Padm\u00e9 and later Palpatine.", "routes": ["Perlemian Trade Route"]}, {"name": "Tatooine", "x": 420, "y": 180, "region": "Outer Rim", "famous": "Luke Skywalker", "quote": "I don't like sand.", "by": "Anakin Skywalker", "trivia": "Remote desert world ruled by Hutt cartels; childhood home of Anakin and Luke.", "routes": ["Corellian Run"]}, {"name": "Jakku", "x": 480, "y": 40, "region": "Outer Rim", "famous": "Rey", "quote": "I\u2019m no one.", "by": "Rey", "trivia": "Desert planet littered with wrecks from the Battle of Jakku; Rey scavenged here.", "routes": ["Corellian Run"]}, {"name": "Bespin", "x": 80, "y": 480, "region": "Outer Rim", "famous": "Lando Calrissian", "quote": "This deal is getting worse all the time.", "by": "Lando Calrissian", "trivia": "Gas giant hosting Cloud City, a tibanna gas mining colony.", "routes": ["Rimma Trade Route"]}, {"name": "Hoth", "x": -160, "y": 520, "region": "Outer Rim", "famous": "Leia Organa", "quote": "Echo Station 3-T-Eight, we have spotted Imperial walkers!", "by": "Rebel Scout", "trivia": "Frozen world where the Rebel Alliance established Echo Base.", "routes": []}, {"name": "Endor", "x": 300, "y": 520, "region": "Outer Rim", "famous": "Wicket W. Warrick", "quote": "Yub nub.", "by": "Ewoks", "trivia": "Forest moon home of the Ewoks; site of the second Death Star\u2019s destruction.", "routes": ["Rimma Trade Route"]}, {"name": "Dagobah", "x": -220, "y": 260, "region": "Outer Rim", "famous": "Yoda", "quote": "Do. Or do not. There is no try.", "by": "Yoda", "trivia": "Swamp world where Yoda lived in exile and trained Luke.", "routes": []}, {"name": "Mustafar", "x": 300, "y": 260, "region": "Outer Rim", "famous": "Darth Vader", "quote": "You were the Chosen One!", "by": "Obi-Wan Kenobi", "trivia": "Volcanic world; site of Anakin and Obi-Wan\u2019s duel.", "routes": []}, {"name": "Geonosis", "x": 260, "y": 140, "region": "Outer Rim", "famous": "Poggle the Lesser", "quote": "The plans you refer to will soon be back in our hands.", "by": "Krennic", "trivia": "Desert world of hives; arena where the Clone Wars began.", "routes": ["Corellian Run"]}, {"name": "Kamino", "x": 500, "y": 260, "region": "Outer Rim", "famous": "Jango Fett", "quote": "Bounty hunter? A complicated profession.", "by": "The Client", "trivia": "Ocean world; Kaminoans created the Grand Army of the Republic.", "routes": []}, {"name": "Kashyyyk", "x": 160, "y": 220, "region": "Mid Rim", "famous": "Chewbacca", "quote": "Aaaaaaargh!", "by": "Chewbacca", "trivia": "Wookiee homeworld of towering wroshyr trees; invaded after Order 66.", "routes": ["Perlemian Trade Route"]}, {"name": "Mon Cala", "x": 120, "y": 360, "region": "Outer Rim", "famous": "Admiral Ackbar", "quote": "It\u2019s a trap!", "by": "Admiral Ackbar", "trivia": "Oceanic world home to the Mon Calamari and Quarren; key Rebel shipyards.", "routes": ["Rimma Trade Route"]}, {"name": "Scarif", "x": 200, "y": 420, "region": "Outer Rim", "famous": "Jyn Erso", "quote": "Rebellions are built on hope.", "by": "Jyn Erso", "trivia": "Imperial archive world where Death Star plans were stolen.", "routes": ["Rimma Trade Route"]}, {"name": "Jedha", "x": 80, "y": 120, "region": "Mid Rim", "famous": "Chirrut \u00cemwe", "quote": "I am one with the Force and the Force is with me.", "by": "Chirrut \u00cemwe", "trivia": "Desert moon sacred to believers in the Force; partially destroyed by the Death Star.", "routes": []}, {"name": "Ilum", "x": -100, "y": 100, "region": "Unknown Regions", "famous": "Jedi Order", "quote": "The crystal chooses the Jedi, not the other way around.", "by": "Tera Sinube", "trivia": "Kyber crystal world later hollowed out as Starkiller Base.", "routes": []}, {"name": "Exegol", "x": -420, "y": 60, "region": "Unknown Regions", "famous": "Darth Sidious", "quote": "The dark side of the Force is a pathway to many abilities\u2026", "by": "Palpatine", "trivia": "Hidden Sith world in the Unknown Regions; site of the Final Order fleet.", "routes": []}, {"name": "Ahch-To", "x": -520, "y": 160, "region": "Unknown Regions", "famous": "Luke Skywalker", "quote": "Reach out with your feelings.", "by": "Luke Skywalker", "trivia": "Ocean world of rocky islands; site of the first Jedi Temple.", "routes": []}, {"name": "Batuu", "x": -480, "y": 260, "region": "Unknown Regions", "famous": "Vi Moradi", "quote": "Bright suns!", "by": "Black Spire Outpost", "trivia": "Frontier world on the edge of Wild Space; home of Black Spire Outpost.", "routes": []}, {"name": "Crait", "x": 20, "y": 460, "region": "Outer Rim", "famous": "Leia Organa", "quote": "We are the spark that\u2019ll light the fire\u2026", "by": "Poe Dameron", "trivia": "Salt flat world used by the Resistance as an emergency base.", "routes": []}, {"name": "Lothal", "x": 380, "y": 80, "region": "Outer Rim", "famous": "Ezra Bridger", "quote": "If I have to do this, I\u2019m doing it my way.", "by": "Ezra Bridger", "trivia": "Agrarian world occupied by the Empire; home of the Spectres.", "routes": []}, {"name": "Mandalore", "x": 260, "y": 60, "region": "Outer Rim", "famous": "Bo-Katan Kryze", "quote": "This is the Way.", "by": "The Armorer", "trivia": "Planet of the Mandalorians; devastated then reclaimed.", "routes": []}, {"name": "Ryloth", "x": 220, "y": 200, "region": "Outer Rim", "famous": "Hera Syndulla", "quote": "We have hope. Hope that things can get better.", "by": "Hera Syndulla", "trivia": "Twi\u2019lek homeworld with harsh extremes; long resisted occupation.", "routes": ["Corellian Run"]}, {"name": "Yavin 4", "x": 120, "y": 440, "region": "Outer Rim", "famous": "Cassian Andor", "quote": "Everything I did, I did for the Rebellion.", "by": "Cassian Andor", "trivia": "Jungle moon that hosted a Rebel base; Battle of Yavin staging ground.", "routes": []}, {"name": "Dathomir", "x": -80, "y": 200, "region": "Outer Rim", "famous": "Mother Talzin", "quote": "My loyal Nightsisters\u2026", "by": "Mother Talzin", "trivia": "Remote world of the Nightsisters and rancors; steeped in dark magick.", "routes": []}, {"name": "Hosnian Prime", "x": 20, "y": -120, "region": "Core", "famous": "Poe Dameron", "quote": "Today is the end of the Republic!", "by": "General Hux", "trivia": "Capital of the New Republic destroyed by Starkiller Base.", "routes": ["Perlemian Trade Route"]}, {"name": "Ord Mantell", "x": 260, "y": 260, "region": "Mid Rim", "famous": "Cid", "quote": "You came to the right place, kid.", "by": "Cid", "trivia": "Smuggler-friendly world visited by the Bad Batch.", "routes": ["Corellian Run"]}, {"name": "Takodana", "x": 220, "y": 20, "region": "Mid Rim", "famous": "Maz Kanata", "quote": "The belonging you seek is not behind you; it is ahead.", "by": "Maz Kanata", "trivia": "Ancient castle world where Rey encounters the Skywalker lightsaber.", "routes": []}, {"name": "Cantonica", "x": 360, "y": -20, "region": "Outer Rim", "famous": "DJ", "quote": "They blow you up today, you blow them up tomorrow. It\u2019s just business.", "by": "DJ", "trivia": "Casino world of Canto Bight.", "routes": []}, {"name": "Kessel", "x": 440, "y": 60, "region": "Outer Rim", "famous": "Qi\u2019ra", "quote": "I\u2019ve got a really good feeling about this.", "by": "Han Solo", "trivia": "Spice-mining world; infamous Kessel Run via the Maelstrom.", "routes": ["Corellian Run"]}, {"name": "Polis Massa", "x": -60, "y": 420, "region": "Outer Rim", "famous": "Obi-Wan Kenobi", "quote": "There is good in him. I know there is\u2026", "by": "Padm\u00e9 Amidala", "trivia": "Asteroid colony where Luke and Leia were born.", "routes": []}, {"name": "Felucia", "x": 140, "y": 300, "region": "Outer Rim", "famous": "Aayla Secura", "quote": "Execute Order 66.", "by": "Palpatine", "trivia": "Bioluminescent jungle world; Aayla Secura died here during Order 66.", "routes": []}, {"name": "Corulag", "x": -20, "y": -40, "region": "Core", "famous": "Wilhuff Tarkin", "quote": "The regional governors now have direct control over their territories.", "by": "Palpatine", "trivia": "Core world near Coruscant with Imperial academies.", "routes": []}, {"name": "Byss", "x": -120, "y": -60, "region": "Deep Core", "famous": "Palpatine", "quote": "The dark side is strong here.", "by": "Palpatine", "trivia": "Deep Core fortress world in Legends; included here as mythic reference.", "routes": []}, {"name": "Balmorra", "x": 60, "y": -10, "region": "Colonies", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Brentaal", "x": -10, "y": -10, "region": "Core", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Malastare", "x": 200, "y": 160, "region": "Mid Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Sullust", "x": 160, "y": 380, "region": "Outer Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Taris", "x": 320, "y": 120, "region": "Outer Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Rodia", "x": 240, "y": 220, "region": "Outer Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Saleucami", "x": 180, "y": 260, "region": "Outer Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Utapau", "x": 140, "y": 240, "region": "Outer Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Haruun Kal", "x": 40, "y": 300, "region": "Mid Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Neimoidia", "x": 40, "y": 40, "region": "Colonies", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Kuat", "x": 30, "y": -30, "region": "Core", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Araxes", "x": 100, "y": 60, "region": "Expansion Region", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Eriadu", "x": 120, "y": 280, "region": "Outer Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Cato Neimoidia", "x": 60, "y": 20, "region": "Colonies", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}, {"name": "Bothawui", "x": 60, "y": 200, "region": "Mid Rim", "famous": "", "quote": "", "by": "", "trivia": "", "routes": []}], "routes": [{"name": "Perlemian Trade Route", "color": "#eebf3f", "pts": [[-100, -80], [0, -40], [80, 0], [140, 60], [200, 120], [260, 180]]}, {"name": "Corellian Run", "color": "#7fd3ff", "pts": [[20, -40], [120, -30], [180, 40], [220, 120], [260, 140], [320, 180], [420, 180], [500, 260]]}, {"name": "Hydian Way", "color": "#f88", "pts": [[-200, 480], [-160, 320], [-40, 160], [40, 0], [120, -80], [240, -160]]}, {"name": "Rimma Trade Route", "color": "#aab6ff", "pts": [[-60, 460], [80, 480], [160, 420], [220, 360], [300, 520]]}, {"name": "Corellian Trade Spine", "color": "#9ef1b0", "pts": [[120, -30], [140, 40], [160, 120], [180, 220], [200, 300]]}]};
+
+const canvas = document.getElementById('map');
+const ctx = canvas.getContext('2d');
+const overlay = document.getElementById('overlay');
+const ovText = document.getElementById('ovText');
+const search = document.getElementById('search');
+const regionFilter = document.getElementById('regionFilter');
+const coordsOut = document.getElementById('coords');
+const routesBar = document.getElementById('routesBar');
+
+// camera
+const state = {
+  w: innerWidth, h: innerHeight,
+  scale: 2.8, // deep initial zoom
+  minScale: 1.8, // can't zoom out too far
+  maxScale: 8.0,
+  x: -50, y: 60, // offset to start near Core
+  dragging: false, lx:0, ly:0,
+  planets: DATA.planets,
+  routes: DATA.routes,
+  selectedRoute: null,
+  selectedPlanet: null,
+};
+
+// --- STARFIELD ---
+const stars = [];
+function seedStars(){
+  stars.length = 0;
+  const count = 300;
+  for(let i=0;i<count;i++){ stars.push({
+    x: Math.random()*state.w, y: Math.random()*state.h,
+    r: Math.random()*1.3+0.2, a: Math.random()*0.6+0.2
+  }); }
+}
+
+// --- REGIONS (asymmetric shapes, closer to the reference) ---
+function regionShapes() {
+  const shapes = [];
+  const addRing=(name,color,rx,ry,skewX=0)=>{
+    shapes.push({name, color, rx, ry, skewX});
+  };
+  addRing('Deep Core','var(--deep)', 90, 70, -6);
+  addRing('Core','var(--core)', 170, 130, -10);
+  addRing('Colonies','var(--colonies)', 280, 210, -14);
+  addRing('Inner Rim','var(--inner)', 380, 280, -16);
+  addRing('Expansion Region','var(--exp)', 520, 360, -14);
+  addRing('Mid Rim','var(--mid)', 650, 450, -10);
+  addRing('Outer Rim','var(--outer)', 820, 560, -6);
+  return shapes;
+}
+const unknownRegion = {name:'Unknown Regions', color:'var(--unk)'};
+
+function drawRegion(shape){
+  ctx.save();
+  ctx.translate(tx(0), ty(0));
+  ctx.beginPath();
+  const rx = shape.rx * state.scale;
+  const ry = shape.ry * state.scale;
+  const skew = shape.skewX * Math.PI/180;
+  for(let a=0;a<=Math.PI*2+0.01;a+=Math.PI/64){
+    const ca = Math.cos(a), sa = Math.sin(a);
+    let x = ca*rx, y = sa*ry;
+    x += Math.sin(a*3)*20*state.scale;
+    y += Math.cos(a*2)*14*state.scale;
+    const sx = x + Math.tan(skew)*y;
+    const sy = y;
+    if(a===0) ctx.moveTo(sx,sy); else ctx.lineTo(sx,sy);
+  }
+  ctx.closePath();
+  ctx.fillStyle = shape.color + '40';
+  ctx.strokeStyle = shape.color + 'aa';
+  ctx.lineWidth = 2;
+  ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+
+function drawUnknown(){
+  // hand-tweaked blobby shape on the LEFT
+  ctx.save();
+  const pts=[
+    [-780,60],[-720,-40],[-640,-100],[-540,-120],[-520,-60],[-520,40],[-540,160],[-600,260],[-660,300],[-720,260],[-780,160]
+  ];
+  ctx.beginPath();
+  pts.forEach((p,i)=>{ const X=tx(p[0]), Y=ty(p[1]); if(i===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y); });
+  ctx.closePath();
+  const cs = getComputedStyle(document.documentElement);
+  const col = cs.getPropertyValue('--unk').trim();
+  ctx.fillStyle = col + '40';
+  ctx.strokeStyle = col + 'aa';
+  ctx.lineWidth = 2;
+  ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+
+// --- transforms ---
+function tx(x){ return ( (x - state.x) * state.scale ) + state.w/2; }
+function ty(y){ return ( (y - state.y) * state.scale ) + state.h/2; }
+function fromScreen(px,py){ return { x: (px - state.w/2)/state.scale + state.x, y: (py - state.h/2)/state.scale + state.y }; }
+
+// --- ROUTE helpers ---
+function drawRoutes(){
+  state.routes.forEach((r,ri)=>{
+    const active = state.selectedRoute===ri;
+    ctx.save();
+    ctx.beginPath();
+    r.pts.forEach((p,i)=>{ const X=tx(p[0]), Y=ty(p[1]); if(i===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y); });
+    ctx.lineWidth = active? 4: 2;
+    ctx.strokeStyle = r.color;
+    ctx.shadowColor = r.color;
+    ctx.shadowBlur = active? 18: 8;
+    ctx.stroke();
+    ctx.restore();
+  });
+}
+function buildRoutesBar(){
+  routesBar.innerHTML='';
+  state.routes.forEach((r,i)=>{
+    const b=document.createElement('button'); b.className='routeTag'; b.textContent=r.name;
+    b.addEventListener('click',()=>{ state.selectedRoute = (state.selectedRoute===i?null:i); if(state.selectedRoute!==null) centerOnPolyline(state.routes[i].pts); render(); });
+    routesBar.appendChild(b);
+  });
+}
+function centerOnPolyline(pts){
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  pts.forEach(p=>{ minX=Math.min(minX,p[0]); minY=Math.min(minY,p[1]); maxX=Math.max(maxX,p[0]); maxY=Math.max(maxY,p[1]); });
+  state.x=(minX+maxX)/2; state.y=(minY+maxY)/2;
+  const pad=80;
+  const w=maxX-minX+pad, h=maxY-minY+pad;
+  const scaleX = (state.w*0.7)/w; const scaleY=(state.h*0.7)/h;
+  state.scale = Math.max(Math.min(scaleX, scaleY), state.minScale);
+}
+
+// --- PLANETS ---
+function drawPlanets(){
+  const planets=state.planets;
+  planets.forEach(pl=>{
+    const X=tx(pl.x), Y=ty(pl.y);
+    if(X<-60||X>state.w+60||Y<-60||Y>state.h+60) return;
+    const hue = regionHue(pl.region);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(X,Y, 4.5, 0, Math.PI*2);
+    ctx.fillStyle = hue;
+    ctx.shadowColor = hue; ctx.shadowBlur = 12;
+    ctx.fill();
+    ctx.font = '12px system-ui'; ctx.fillStyle = '#eaf2ff';
+    ctx.strokeStyle='rgba(0,0,0,.5)'; ctx.lineWidth=3; ctx.strokeText(pl.name, X+8, Y-8);
+    ctx.fillText(pl.name, X+8, Y-8);
+    ctx.restore();
+  });
+}
+function regionHue(region){
+  const r = {"Deep Core":"var(--deep)","Core":"var(--core)","Colonies":"var(--colonies)","Inner Rim":"var(--inner)","Expansion Region":"var(--exp)","Mid Rim":"var(--mid)","Outer Rim":"var(--outer)","Unknown Regions":"var(--unk)"};
+  return r[region]||'#fff';
+}
+
+// --- GRID (dynamic labels on edges) ---
+const edgeGrid = document.createElement('div');
+edgeGrid.id='edgeGrid';
+edgeGrid.innerHTML = `<div class="edge-labels edge-top"></div><div class="edge-labels edge-bottom"></div><div class="edge-labels edge-left"></div><div class="edge-labels edge-right"></div>`;
+document.querySelector('.wrap').appendChild(edgeGrid);
+const eTop=edgeGrid.querySelector('.edge-top'), eBottom=edgeGrid.querySelector('.edge-bottom'), eLeft=edgeGrid.querySelector('.edge-left'), eRight=edgeGrid.querySelector('.edge-right');
+
+function drawGrid(){
+  ctx.save();
+  ctx.strokeStyle = 'rgba(110,160,230,.18)';
+  ctx.lineWidth = 1;
+  const minX = fromScreen(0,0).x, maxX = fromScreen(state.w, state.h).x;
+  const minY = fromScreen(0,0).y, maxY = fromScreen(state.w, state.h).y;
+  const startX = Math.floor(minX/80)*80, endX = Math.ceil(maxX/80)*80;
+  const startY = Math.floor(minY/80)*80, endY = Math.ceil(maxY/80)*80;
+
+  for(let x=startX;x<=endX;x+=80){ const X=tx(x); ctx.beginPath(); ctx.moveTo(X,0); ctx.lineTo(X,state.h); ctx.stroke(); }
+  for(let y=startY;y<=endY;y+=80){ const Y=ty(y); ctx.beginPath(); ctx.moveTo(0,Y); ctx.lineTo(state.w,Y); ctx.stroke(); }
+  ctx.restore();
+
+  const cols = "CDEFGHIJKLMNOPQRSTU".split('');
+  const rows = Array.from({length:21},(_,i)=>i+1);
+  function colFor(x){
+    const t = (x+900)/1800;
+    const idx = Math.max(0, Math.min(cols.length-1, Math.floor(t*cols.length)));
+    return cols[idx];
+  }
+  function rowFor(y){
+    const t = (y+900)/1800;
+    const idx = Math.max(0, Math.min(rows.length-1, Math.floor(t*rows.length)));
+    return rows[idx];
+  }
+  const leftCol = colFor(fromScreen(0,0).x);
+  const rightCol= colFor(fromScreen(state.w,0).x);
+  const topRow  = rowFor(fromScreen(0,0).y);
+  const botRow  = rowFor(fromScreen(0,state.h).y);
+
+  function spreadLabels(container, values){
+    container.innerHTML='';
+    const arr = Array.isArray(values)? values: [];
+    arr.forEach(v=>{ const s=document.createElement('span'); s.textContent=v; container.appendChild(s); });
+  }
+  function seqCols(a,b){
+    const cols = "CDEFGHIJKLMNOPQRSTU".split('');
+    const aI = cols.indexOf(a), bI=cols.indexOf(b);
+    if(aI<0||bI<0) return [a];
+    const step = aI<=bI?1:-1, out=[];
+    for(let i=aI;i!=bI+step;i+=step) out.push(cols[i]);
+    return out;
+  }
+  function seqRows(a,b){
+    const rows = Array.from({length:21},(_,i)=>i+1);
+    const aI = rows.indexOf(a), bI=rows.indexOf(b);
+    if(aI<0||bI<0) return [a];
+    const step = aI<=bI?1:-1, out=[];
+    for(let i=aI;i!=bI+step;i+=step) out.push(rows[i]);
+    return out;
+  }
+  spreadLabels(eTop, seqCols(leftCol,rightCol));
+  spreadLabels(eBottom, seqCols(leftCol,rightCol));
+  spreadLabels(eLeft, seqRows(topRow,botRow));
+  spreadLabels(eRight, seqRows(topRow,botRow));
+}
+
+// --- POPUP ---
+const details = document.getElementById('details');
+const dName = document.getElementById('dName');
+const dRegionTag = document.getElementById('dRegionTag');
+const dGrid = document.getElementById('dGrid');
+const dFamous = document.getElementById('dFamous');
+const dQuote = document.getElementById('dQuote');
+const dNotes = document.getElementById('dNotes');
+const dRoutes = document.getElementById('dRoutes');
+
+function showPlanet(pl){
+  dName.textContent=pl.name;
+  dRegionTag.textContent=pl.region;
+  dRegionTag.style.borderColor = regionHue(pl.region);
+  dFamous.textContent=pl.famous||'—';
+  dQuote.textContent = (pl.by? `${pl.by}: ` : '') + (pl.quote||'');
+  dNotes.textContent=pl.trivia||'';
+  dRoutes.innerHTML='';
+  (pl.routes||[]).forEach(r=>{ const li=document.createElement('li'); li.textContent=r; dRoutes.appendChild(li); });
+  const cols = "CDEFGHIJKLMNOPQRSTU";
+  const rows = Array.from({length:21},(_,i)=>i+1);
+  const colIdx = Math.max(0, Math.min(cols.length-1, Math.floor(((pl.x+900)/1800)*cols.length)));
+  const rowIdx = Math.max(0, Math.min(rows.length-1, Math.floor(((pl.y+900)/1800)*rows.length)));
+  dGrid.textContent = cols[colIdx] + '-' + rows[rowIdx];
+  details.showModal();
+}
+
+// --- INPUT ---
+canvas.addEventListener('mousedown',e=>{ state.dragging=true; state.lx=e.clientX; state.ly=e.clientY; });
+window.addEventListener('mouseup',()=>state.dragging=false);
+window.addEventListener('mousemove',e=>{
+  if(state.dragging){
+    const dx=(e.clientX-state.lx)/state.scale; const dy=(e.clientY-state.ly)/state.scale;
+    state.x -= dx; state.y -= dy; state.lx=e.clientX; state.ly=e.clientY; render();
+  }
+});
+canvas.addEventListener('wheel',e=>{ e.preventDefault(); const delta = Math.sign(e.deltaY); 
+  const pre=fromScreen(e.clientX,e.clientY);
+  state.scale *= (delta>0? 0.9: 1.1);
+  state.scale = Math.max(state.minScale, Math.min(state.maxScale, state.scale));
+  const post=fromScreen(e.clientX,e.clientY);
+  state.x += pre.x-post.x; state.y += pre.y-post.y; render();
+}, {passive:false});
+canvas.addEventListener('click',e=>{
+  const pt=fromScreen(e.clientX,e.clientY);
+  for(const pl of state.planets){
+    const X=tx(pl.x), Y=ty(pl.y);
+    const d = Math.hypot(X-e.clientX, Y-e.clientY);
+    if(d<10){ showPlanet(pl); return; }
+  }
+});
+
+search.addEventListener('input',()=>{ renderList(); });
+regionFilter.addEventListener('change',()=>{ jumpToRegion(regionFilter.value); render(); });
+
+function jumpToRegion(rName){
+  if(!rName) return;
+  let bounds = {'Deep Core':[ -120,-90, 120, 90 ],
+    'Core':[ -200,-150, 200, 150 ],
+    'Colonies':[ -300,-220, 300,220 ],
+    'Inner Rim':[ -420,-300, 420,300 ],
+    'Expansion Region':[ -560,-380, 560,380 ],
+    'Mid Rim':[ -700,-460, 700,460 ],
+    'Outer Rim':[ -860,-560, 860,560 ],
+    'Unknown Regions':[ -760,-120, -300, 320 ],
+  }[rName];
+  if(!bounds) return;
+  const [minX,minY,maxX,maxY]=bounds;
+  state.x=(minX+maxX)/2; state.y=(minY+maxY)/2;
+  const scaleX = (state.w*0.7)/(maxX-minX);
+  const scaleY = (state.h*0.7)/(maxY-minY);
+  state.scale = Math.max(state.minScale, Math.min(state.maxScale, Math.min(scaleX,scaleY)));
+}
+
+// --- SIDE LIST ---
+const panel=document.getElementById('panel');
+document.getElementById('togglePanel').onclick=()=>panel.hidden=!panel.hidden;
+document.getElementById('closePanel').onclick=()=>panel.hidden=true;
+const list=document.getElementById('list');
+function renderList(){
+  const q=(search.value||'').toLowerCase();
+  const reg=regionFilter.value;
+  list.innerHTML='';
+  state.planets.filter(pl=> (pl.name.toLowerCase().includes(q) && (!reg||pl.region===reg)) )
+    .sort((a,b)=>a.name.localeCompare(b.name))
+    .forEach(pl=>{ const li=document.createElement('li'); li.textContent=pl.name+' — '+pl.region; li.onclick=()=>{ state.x=pl.x; state.y=pl.y; state.scale=6; render(); showPlanet(pl); }; list.appendChild(li); });
+}
+
+// --- RENDER ---
+function render(){
+  canvas.width = state.w = innerWidth; canvas.height = state.h = innerHeight;
+  // starfield
+  ctx.clearRect(0,0,state.w,state.h);
+  for(let i=0;i<300;i++){ const sx=Math.random()*state.w, sy=Math.random()*state.h, r=Math.random()*1.2+.2; ctx.globalAlpha=Math.random()*.6+.2; ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.fillStyle='#cce6ff'; ctx.fill(); }
+  ctx.globalAlpha=1;
+
+  drawGrid();
+  regionShapes().forEach(drawRegion);
+  drawUnknown();
+  drawRoutes();
+  drawPlanets();
+
+  coordsOut.textContent = `x ${state.x.toFixed(1)}, y ${state.y.toFixed(1)} • zoom ${state.scale.toFixed(2)}`;
+  Array.from(routesBar.children).forEach((b,i)=> b.classList.toggle('active', state.selectedRoute===i));
+}
+
+function init(){
+  seedStars();
+  buildRoutesBar();
+  renderList();
+  if(overlay) overlay.style.display='none';
+  render();
+}
+
+window.addEventListener('resize',()=>render());
+init();
+
+</script>
+</body></html>
