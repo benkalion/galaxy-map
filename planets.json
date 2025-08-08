@@ -9,14 +9,14 @@
         -10,
         0
       ],
-      "famous": "Palpatine, Padm\u00e9 Amidala",
+      "famous": "Palpatine; Padm\u00e9 Amidala; Mas Amedda",
       "routes": [
         "Perlemian Trade Route",
         "Hydian Way"
       ],
       "featured": true,
       "quote": "The entire planet is one big city.",
-      "notes": "Ecumenopolis and seat of the Galactic Senate and later the Imperial Palace."
+      "notes": "Ecumenopolis and capital of the Republic, Empire, and later the First Order for a time."
     },
     {
       "name": "Alderaan",
@@ -27,11 +27,11 @@
         -15,
         10
       ],
-      "famous": "Leia Organa, Bail Organa",
+      "famous": "Leia Organa; Bail Organa",
       "routes": [],
       "featured": true,
-      "quote": "You may fire when ready.",
-      "notes": "Peaceful, mountainous world destroyed by the first Death Star in 0 BBY."
+      "quote": "Alderaan is peaceful. We have no weapons.",
+      "notes": "Pacifist, mountainous world destroyed by the first Death Star in 0 BBY."
     },
     {
       "name": "Corellia",
@@ -42,13 +42,13 @@
         -2,
         -12
       ],
-      "famous": "Han Solo",
+      "famous": "Han Solo; Wedge Antilles",
       "routes": [
         "Corellian Run"
       ],
       "featured": true,
       "quote": "Fast ships and faster pilots.",
-      "notes": "Shipbuilding powerhouse\u2014Corellian Engineering Corporation."
+      "notes": "Home of the Corellian Engineering Corporation; famed for the YT-series freighters."
     },
     {
       "name": "Chandrila",
@@ -62,7 +62,7 @@
       "famous": "Mon Mothma",
       "routes": [],
       "quote": "Beacon of the early New Republic.",
-      "notes": "Agrarian core world and New Republic's first capital post-Endor."
+      "notes": "Agrarian core world and first capital of the New Republic post-Endor."
     },
     {
       "name": "Brentaal",
@@ -90,10 +90,10 @@
         -18,
         6
       ],
-      "famous": "Neimoidian purse worlds",
+      "famous": "Trade Federation barons",
       "routes": [],
       "quote": "Bridge-cities cling to giant arches.",
-      "notes": "One of several purse worlds of the Trade Federation."
+      "notes": "One of several purse worlds of the Neimoidians."
     },
     {
       "name": "Kuat",
@@ -107,7 +107,7 @@
       "famous": "Kuat Drive Yards",
       "routes": [],
       "quote": "Where Star Destroyers are born.",
-      "notes": "Massive ring-shaped shipyards built around the planet."
+      "notes": "Ring-shaped shipyards encircle the planet."
     },
     {
       "name": "Duro",
@@ -121,7 +121,7 @@
       "famous": "Duros spacers",
       "routes": [],
       "quote": "Ancient spacefaring culture.",
-      "notes": "Surface heavily polluted\u2014citizens live in orbital cities."
+      "notes": "Surface heavily polluted; population lives in orbital habitats."
     },
     {
       "name": "Commenor",
@@ -132,7 +132,7 @@
         -10,
         10
       ],
-      "famous": "Queen Talyon, later occupied by First Order",
+      "famous": "Ruler Queen Talyon (var. canon)",
       "routes": [],
       "quote": "A wealthy trade nexus.",
       "notes": "Important shipping lane world in the Colonies region."
@@ -160,7 +160,7 @@
         -10,
         -10
       ],
-      "famous": "Smuggler haven",
+      "famous": "Smuggler captains",
       "routes": [],
       "quote": "Scrapyards stretching to the horizon.",
       "notes": "Known for junkyards and mercenary work."
@@ -202,7 +202,7 @@
         -60,
         -10
       ],
-      "famous": "Canto Bight",
+      "famous": "Canto Bight clientele",
       "routes": [],
       "quote": "High-stakes glamour on the coast.",
       "notes": "Casino city draws the galaxy\u2019s elite and war profiteers."
@@ -219,7 +219,7 @@
       "famous": "Saw Gerrera",
       "routes": [],
       "quote": "A jungle world that resists occupiers.",
-      "notes": "Moon Dxun shares atmosphere; history of rebellions."
+      "notes": "Moon Dxun shares atmosphere; history of insurgency."
     },
     {
       "name": "Balmorra",
@@ -230,10 +230,10 @@
         -4,
         30
       ],
-      "famous": "Weapons factories",
+      "famous": "Weapons manufacturers",
       "routes": [],
       "quote": "Industrial foundries hum day and night.",
-      "notes": "Known for arms manufacturing since the Old Republic."
+      "notes": "Known for arms production since the Old Republic."
     },
     {
       "name": "Geonosis",
@@ -244,13 +244,13 @@
         -10,
         -10
       ],
-      "famous": "Arena & droid foundries",
+      "famous": "Poggle the Lesser",
       "routes": [
         "Corellian Run"
       ],
       "featured": true,
       "quote": "Where the Clone Wars began.",
-      "notes": "Petrified spires and hive cities; Site of the First Battle of Geonosis."
+      "notes": "Petrified spires and hive cities; site of the First Battle of Geonosis."
     },
     {
       "name": "Tatooine",
@@ -267,7 +267,7 @@
       ],
       "featured": true,
       "quote": "You will never find a more wretched hive of scum and villainy.",
-      "notes": "Desert planet with twin suns; Mos Eisley, Mos Espa."
+      "notes": "Desert planet with twin suns; Mos Eisley and Mos Espa spaceports."
     },
     {
       "name": "Ryloth",
@@ -278,7 +278,7 @@
         -20,
         10
       ],
-      "famous": "Twi\u2019leks",
+      "famous": "Cham & Hera Syndulla",
       "routes": [
         "Corellian Run"
       ],
@@ -298,7 +298,7 @@
       "routes": [],
       "featured": true,
       "quote": "I have the high ground!",
-      "notes": "Volcanic world; site of Anakin vs. Obi\u2011Wan and Vader\u2019s fortress."
+      "notes": "Volcanic world; site of Anakin vs Obi\u2011Wan and later Vader\u2019s castle."
     },
     {
       "name": "Utapau",
@@ -309,10 +309,10 @@
         35,
         10
       ],
-      "famous": "Pau\u2019ans & sinkholes",
+      "famous": "Tion Medon; General Grievous (battle)",
       "routes": [],
       "quote": "Cities built into vast sinkholes.",
-      "notes": "General Grievous hunted here by Obi\u2011Wan Kenobi."
+      "notes": "Kenobi confronted Grievous here during the Clone Wars."
     },
     {
       "name": "Felucia",
@@ -326,7 +326,7 @@
       "famous": "Aayla Secura",
       "routes": [],
       "quote": "Bioluminescent fungal forests.",
-      "notes": "Clone Wars battles\u2014Order 66 executed here."
+      "notes": "Order 66 executed here against Secura."
     },
     {
       "name": "Saleucami",
@@ -351,7 +351,7 @@
         20,
         60
       ],
-      "famous": "Cloud City / Lando",
+      "famous": "Lando Calrissian",
       "routes": [
         "Rimma Trade Route"
       ],
@@ -368,7 +368,7 @@
         -60,
         20
       ],
-      "famous": "Echo Base",
+      "famous": "Echo Base crew",
       "routes": [
         "Rimma Trade Route"
       ],
@@ -385,10 +385,10 @@
         0,
         40
       ],
-      "famous": "Ewoks",
+      "famous": "Ewoks; Han & Leia (mission)",
       "routes": [],
       "quote": "Shield generator guarded in the forest moon.",
-      "notes": "Battle of Endor ended the Empire\u2019s reign."
+      "notes": "Battle of Endor broke Imperial power."
     },
     {
       "name": "Dagobah",
@@ -402,7 +402,7 @@
       "famous": "Yoda",
       "routes": [],
       "quote": "Do or do not. There is no try.",
-      "notes": "Remote swamp world\u2014Yoda\u2019s self\u2011exile refuge."
+      "notes": "Remote swamp world of Yoda\u2019s exile."
     },
     {
       "name": "Yavin IV",
@@ -413,10 +413,10 @@
         -50,
         10
       ],
-      "famous": "Rebel base",
+      "famous": "Rebel Alliance",
       "routes": [],
       "quote": "Massassi temples hide the Alliance.",
-      "notes": "Base used to launch the attack on the first Death Star."
+      "notes": "Launch point for the attack on the first Death Star."
     },
     {
       "name": "Lothal",
@@ -427,7 +427,7 @@
         -30,
         30
       ],
-      "famous": "Ezra Bridger",
+      "famous": "Ezra Bridger; Sabine Wren (liberation)",
       "routes": [],
       "quote": "Imperial occupation meets local resistance.",
       "notes": "Key world in the Lothal sector; TIE Defender project."
@@ -441,7 +441,7 @@
         -30,
         90
       ],
-      "famous": "Rogue One heist",
+      "famous": "Rogue One team",
       "routes": [],
       "quote": "Tropical archive world.",
       "notes": "Imperial data vault containing Death Star plans."
@@ -455,7 +455,7 @@
         50,
         30
       ],
-      "famous": "Old Rebel base",
+      "famous": "Rebel sympathizers",
       "routes": [
         "Perlemian Trade Route"
       ],
@@ -471,7 +471,7 @@
         -10,
         0
       ],
-      "famous": "Spice mines",
+      "famous": "Hondo Ohnaka (frequent), smugglers",
       "routes": [],
       "quote": "Watch the maw and the maelstrom.",
       "notes": "Smuggling route known as the Kessel Run skirts black holes."
@@ -490,7 +490,7 @@
         "Hydian Way"
       ],
       "quote": "Ruthless efficiency in the Outer Rim.",
-      "notes": "Industrial capital; anchor of the Hydian Way."
+      "notes": "Industrial capital anchoring the Hydian Way."
     },
     {
       "name": "Kamino",
@@ -501,10 +501,10 @@
         50,
         95
       ],
-      "famous": "Cloners",
+      "famous": "Prime Minister Lama Su; Jango Fett (template)",
       "routes": [],
       "quote": "Endless storms over an endless ocean.",
-      "notes": "Created Jango Fett\u2013based clone army for the Republic."
+      "notes": "Created the Grand Army of the Republic."
     },
     {
       "name": "Rishi",
@@ -515,7 +515,7 @@
         -40,
         68
       ],
-      "famous": "Rishi outpost",
+      "famous": "Rishi outpost troopers",
       "routes": [],
       "quote": "Sentinel of the sea-lanes.",
       "notes": "Strategic listening post during the Clone Wars."
@@ -529,10 +529,10 @@
         20,
         10
       ],
-      "famous": "SoroSuub",
+      "famous": "SoroSuub executives; Rebel commanders",
       "routes": [],
       "quote": "Volcanic caverns, loyal to the Alliance.",
-      "notes": "Staging ground for the assault on Endor."
+      "notes": "Staging ground for the fleet that attacked Endor."
     },
     {
       "name": "Mandalore",
@@ -543,7 +543,7 @@
         40,
         -10
       ],
-      "famous": "Bo-Katan Kryze",
+      "famous": "Bo-Katan Kryze; Pre Vizsla",
       "routes": [],
       "featured": true,
       "quote": "This is the Way.",
@@ -558,7 +558,7 @@
         66,
         -10
       ],
-      "famous": "Mandalore moon",
+      "famous": "Death Watch",
       "routes": [],
       "quote": "Quiet moon with hidden mines.",
       "notes": "Once used by Death Watch as a base."
@@ -572,10 +572,10 @@
         -80,
         -10
       ],
-      "famous": "Bounty Guild",
+      "famous": "Greef Karga; Din Djarin frequents",
       "routes": [],
       "quote": "Frontier crossroads for guild work.",
-      "notes": "Host to Greef Karga\u2019s operations."
+      "notes": "Bounty Hunters\u2019 Guild hub."
     },
     {
       "name": "Ilum",
@@ -586,7 +586,7 @@
         -24,
         20
       ],
-      "famous": "Jedi kyber",
+      "famous": "Jedi Order",
       "routes": [],
       "featured": true,
       "quote": "Source of many Jedi lightsaber crystals.",
@@ -604,7 +604,7 @@
       "famous": "Luke Skywalker",
       "routes": [],
       "quote": "The first Jedi Temple lies here.",
-      "notes": "Remote ocean world dotted with rocky islands and caretakers."
+      "notes": "Remote ocean world dotted with rocky islands and Lanai caretakers."
     },
     {
       "name": "Exegol",
@@ -629,10 +629,10 @@
         -10,
         -40
       ],
-      "famous": "Rey",
+      "famous": "Rey; Lor San Tekka (village)",
       "routes": [],
       "quote": "Graveyard of giants.",
-      "notes": "Site of a decisive battle after Endor; scavenging culture."
+      "notes": "Decisive battle after Endor left starship wrecks across the deserts."
     },
     {
       "name": "Naboo",
@@ -643,7 +643,7 @@
         30,
         6
       ],
-      "famous": "Padm\u00e9 Amidala, Palpatine",
+      "famous": "Padm\u00e9 Amidala; Sheev Palpatine",
       "routes": [],
       "featured": true,
       "quote": "Idyllic lakes and Gungan swamps.",
@@ -660,8 +660,8 @@
       ],
       "famous": "Greedo",
       "routes": [],
-      "quote": "Tropical wetlands, rodent-like fauna.",
-      "notes": "Rodian homeworld; strong hunting traditions."
+      "quote": "Tropical wetlands and fierce hunters.",
+      "notes": "Rodian homeworld with deep hunting traditions."
     },
     {
       "name": "Batuu",
@@ -686,7 +686,7 @@
         -20,
         -60
       ],
-      "famous": "Resistance evacuation",
+      "famous": "General Organa & Resistance",
       "routes": [],
       "quote": "Salt flats over crimson crystal.",
       "notes": "Battle of Crait staged the Resistance escape from the First Order."
@@ -700,10 +700,10 @@
         -10,
         -30
       ],
-      "famous": "Resistance base",
+      "famous": "Poe Dameron; Leia\u2019s Resistance",
       "routes": [],
       "quote": "Hidden jungle headquarters.",
-      "notes": "Destroyed by the First Order\u2019s dreadnought attack."
+      "notes": "Destroyed by a dreadnought strike early in the war."
     },
     {
       "name": "Polis Massa",
@@ -714,10 +714,10 @@
         -30,
         40
       ],
-      "famous": "Birth of Luke & Leia",
+      "famous": "Medical droids; Kenobi & Yoda (visit)",
       "routes": [],
       "quote": "Asteroids harbor a secret med center.",
-      "notes": "Kenobi and Yoda brought Padm\u00e9 here after Mustafar."
+      "notes": "Padm\u00e9 gave birth to Luke and Leia here."
     },
     {
       "name": "Eadu",
@@ -731,7 +731,7 @@
       "famous": "Galen Erso",
       "routes": [],
       "quote": "Perpetual storms cloak Imperial labs.",
-      "notes": "Research world for the Death Star kyber program."
+      "notes": "Kyber research site for the Death Star."
     },
     {
       "name": "Serenno",
