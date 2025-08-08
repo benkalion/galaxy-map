@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Star Wars Galaxy – Interactive Map (Prototype)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 aria-label="Star Wars Galaxy Interactive Map">Star&nbsp;Wars Galaxy</h1>
+    <div class="controls">
+      <input id="search" type="search" placeholder="Search planets… (e.g., Tatooine)" aria-label="Search planets" autocomplete="off">
+      <button id="resetView" title="Reset view" aria-label="Reset view">Reset</button>
+      <button id="toggleList" title="Toggle list panel" aria-expanded="false" aria-controls="listPanel">List</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="mapWrap">
+      <canvas id="map" aria-label="Galaxy map" role="img"></canvas>
+      <div class="legend" aria-hidden="true">
+        <div class="dot core"></div><span>Core & Colonies</span>
+        <div class="dot mid"></div><span>Mid & Expansion Rim</span>
+        <div class="dot outer"></div><span>Outer Rim & Wild</span>
+      </div>
+      <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    </section>
+
+    <aside id="listPanel" aria-label="Planet list" hidden>
+      <div class="listHead">
+        <h2>Planets</h2>
+        <div class="filters">
+          <select id="regionFilter" aria-label="Filter by region">
+            <option value="">All regions</option>
+            <option value="Core">Core & Colonies</option>
+            <option value="Mid Rim">Mid & Expansion Rim</option>
+            <option value="Outer Rim">Outer Rim & Wild Space</option>
+          </select>
+          <select id="eraFilter" aria-label="Filter by era">
+            <option value="">All eras</option>
+            <option>Prequel</option>
+            <option>Original</option>
+            <option>Sequel</option>
+            <option>Clone Wars</option>
+            <option>Rebels</option>
+            <option>Mando Era</option>
+            <option>Legends</option>
+          </select>
+        </div>
+      </div>
+      <ul id="planetList" role="list"></ul>
+    </aside>
+  </main>
+
+  <dialog id="detailDialog" aria-label="Planet details">
+    <form method="dialog">
+      <header class="dialogHead">
+        <h3 id="planetName">Planet</h3>
+        <button value="close" aria-label="Close">✕</button>
+      </header>
+      <div class="dialogBody">
+        <dl>
+          <dt>Region</dt><dd id="planetRegion"></dd>
+          <dt>Affiliation</dt><dd id="planetAffiliation"></dd>
+          <dt>Era</dt><dd id="planetEra"></dd>
+          <dt>Notes</dt><dd id="planetNotes"></dd>
+          <dt>Coordinates</dt><dd id="planetCoords"></dd>
+        </dl>
+      </div>
+    </form>
+  </dialog>
+
+  <footer>
+    <small>Prototype — no canonical coordinates. Touch: drag to pan, pinch to zoom, tap to select. Mouse: drag to pan, wheel to zoom, click to select.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

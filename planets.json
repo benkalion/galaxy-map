@@ -1,0 +1,522 @@
+[
+  {
+    "id": 1,
+    "name": "Coruscant",
+    "region": "Core",
+    "affiliation": "Republic/Empire",
+    "era": "Prequel, Original, Clone Wars",
+    "notes": "Ecumenopolis, galactic capital",
+    "x": -40.0,
+    "y": -30.0
+  },
+  {
+    "id": 2,
+    "name": "Alderaan",
+    "region": "Core",
+    "affiliation": "Republic/Rebellion",
+    "era": "Prequel, Original",
+    "notes": "Peaceful world destroyed by Death Star",
+    "x": -60.0,
+    "y": 0.0
+  },
+  {
+    "id": 3,
+    "name": "Corellia",
+    "region": "Core",
+    "affiliation": "Republic",
+    "era": "Prequel, Solo",
+    "notes": "Shipyards; Han Solo's home",
+    "x": -20.0,
+    "y": -10.0
+  },
+  {
+    "id": 4,
+    "name": "Chandrila",
+    "region": "Core",
+    "affiliation": "Republic/Rebellion",
+    "era": "Original",
+    "notes": "Mon Mothma's home",
+    "x": -10.0,
+    "y": -60.0
+  },
+  {
+    "id": 5,
+    "name": "Hosnian Prime",
+    "region": "Core",
+    "affiliation": "New Republic",
+    "era": "Sequel",
+    "notes": "Destroyed by Starkiller Base",
+    "x": 20.0,
+    "y": -70.0
+  },
+  {
+    "id": 6,
+    "name": "Cato Neimoidia",
+    "region": "Core",
+    "affiliation": "Trade Federation",
+    "era": "Prequel",
+    "notes": "Bridge cities",
+    "x": -15.0,
+    "y": 15.0
+  },
+  {
+    "id": 7,
+    "name": "Naboo",
+    "region": "Mid Rim",
+    "affiliation": "Republic",
+    "era": "Prequel",
+    "notes": "Gungans & Theed",
+    "x": 60.0,
+    "y": 20.0
+  },
+  {
+    "id": 8,
+    "name": "Kashyyyk",
+    "region": "Mid Rim",
+    "affiliation": "Republic",
+    "era": "Prequel, Clone Wars",
+    "notes": "Wookiee homeworld",
+    "x": 40.0,
+    "y": -30.0
+  },
+  {
+    "id": 9,
+    "name": "Bespin",
+    "region": "Outer Rim",
+    "affiliation": "Empire/Independent",
+    "era": "Original",
+    "notes": "Gas giant with Cloud City",
+    "x": -80.0,
+    "y": 90.0
+  },
+  {
+    "id": 10,
+    "name": "Dagobah",
+    "region": "Outer Rim",
+    "affiliation": "Independent",
+    "era": "Original",
+    "notes": "Yoda's exile",
+    "x": -100.0,
+    "y": 70.0
+  },
+  {
+    "id": 11,
+    "name": "Endor",
+    "region": "Outer Rim",
+    "affiliation": "Empire/Independent",
+    "era": "Original",
+    "notes": "Forest moon",
+    "x": -120.0,
+    "y": 120.0
+  },
+  {
+    "id": 12,
+    "name": "Hoth",
+    "region": "Outer Rim",
+    "affiliation": "Rebellion",
+    "era": "Original",
+    "notes": "Ice world",
+    "x": -140.0,
+    "y": 40.0
+  },
+  {
+    "id": 13,
+    "name": "Tatooine",
+    "region": "Outer Rim",
+    "affiliation": "Hutt Space",
+    "era": "Prequel, Original, Mando Era",
+    "notes": "Desert world; Luke & Anakin",
+    "x": -180.0,
+    "y": -20.0
+  },
+  {
+    "id": 14,
+    "name": "Jakku",
+    "region": "Outer Rim",
+    "affiliation": "Independent",
+    "era": "Sequel",
+    "notes": "Desert scavenger world",
+    "x": -200.0,
+    "y": -50.0
+  },
+  {
+    "id": 15,
+    "name": "Mustafar",
+    "region": "Outer Rim",
+    "affiliation": "Empire",
+    "era": "Prequel, Rebels",
+    "notes": "Volcanic; Vader's castle",
+    "x": 120.0,
+    "y": -40.0
+  },
+  {
+    "id": 16,
+    "name": "Geonosis",
+    "region": "Outer Rim",
+    "affiliation": "Separatists",
+    "era": "Prequel, Clone Wars",
+    "notes": "Droid foundries",
+    "x": 140.0,
+    "y": 10.0
+  },
+  {
+    "id": 17,
+    "name": "Kamino",
+    "region": "Outer Rim",
+    "affiliation": "Republic/Cloners",
+    "era": "Prequel, Clone Wars",
+    "notes": "Ocean world; cloning",
+    "x": 190.0,
+    "y": -80.0
+  },
+  {
+    "id": 18,
+    "name": "Utapau",
+    "region": "Outer Rim",
+    "affiliation": "Republic",
+    "era": "Prequel",
+    "notes": "Sinking sinkholes",
+    "x": 110.0,
+    "y": 50.0
+  },
+  {
+    "id": 19,
+    "name": "Felucia",
+    "region": "Outer Rim",
+    "affiliation": "Republic",
+    "era": "Prequel, Clone Wars",
+    "notes": "Fungal jungles",
+    "x": 90.0,
+    "y": 80.0
+  },
+  {
+    "id": 20,
+    "name": "Saleucami",
+    "region": "Outer Rim",
+    "affiliation": "Republic",
+    "era": "Prequel, Clone Wars",
+    "notes": "Outer Rim sieges",
+    "x": 130.0,
+    "y": 90.0
+  },
+  {
+    "id": 21,
+    "name": "Mon Cala",
+    "region": "Mid Rim",
+    "affiliation": "Rebellion",
+    "era": "Original, Clone Wars",
+    "notes": "Mon Calamari & Quarren",
+    "x": -10.0,
+    "y": 90.0
+  },
+  {
+    "id": 22,
+    "name": "Yavin IV",
+    "region": "Outer Rim",
+    "affiliation": "Rebellion",
+    "era": "Original",
+    "notes": "Jungle moon rebel base",
+    "x": -110.0,
+    "y": 10.0
+  },
+  {
+    "id": 23,
+    "name": "Dantooine",
+    "region": "Outer Rim",
+    "affiliation": "Rebellion",
+    "era": "Original, Legends",
+    "notes": "Old rebel base",
+    "x": -60.0,
+    "y": 60.0
+  },
+  {
+    "id": 24,
+    "name": "Lothal",
+    "region": "Outer Rim",
+    "affiliation": "Empire",
+    "era": "Rebels",
+    "notes": "Industrialized by Empire",
+    "x": 40.0,
+    "y": 110.0
+  },
+  {
+    "id": 25,
+    "name": "Scarif",
+    "region": "Outer Rim",
+    "affiliation": "Empire",
+    "era": "Original, Rogue One",
+    "notes": "Data vault",
+    "x": -30.0,
+    "y": 120.0
+  },
+  {
+    "id": 26,
+    "name": "Jedha",
+    "region": "Mid Rim",
+    "affiliation": "Empire/Guardians",
+    "era": "Original, Rogue One",
+    "notes": "Kyber holy world",
+    "x": -20.0,
+    "y": 140.0
+  },
+  {
+    "id": 27,
+    "name": "Ilum",
+    "region": "Unknown Regions",
+    "affiliation": "Jedi/Empire",
+    "era": "Clone Wars, Sequel",
+    "notes": "Kyber world; becomes Starkiller",
+    "x": 40.0,
+    "y": -120.0
+  },
+  {
+    "id": 28,
+    "name": "Ahch-To",
+    "region": "Unknown Regions",
+    "affiliation": "Jedi",
+    "era": "Sequel",
+    "notes": "Luke's exile world",
+    "x": 10.0,
+    "y": -140.0
+  },
+  {
+    "id": 29,
+    "name": "Crait",
+    "region": "Outer Rim",
+    "affiliation": "Resistance",
+    "era": "Sequel",
+    "notes": "Salt flats",
+    "x": -10.0,
+    "y": -110.0
+  },
+  {
+    "id": 30,
+    "name": "D'Qar",
+    "region": "Outer Rim",
+    "affiliation": "Resistance",
+    "era": "Sequel",
+    "notes": "Base world",
+    "x": -20.0,
+    "y": -90.0
+  },
+  {
+    "id": 31,
+    "name": "Takodana",
+    "region": "Mid Rim",
+    "affiliation": "Independent",
+    "era": "Sequel",
+    "notes": "Maz Kanata's castle",
+    "x": -50.0,
+    "y": -100.0
+  },
+  {
+    "id": 32,
+    "name": "Mandalore",
+    "region": "Outer Rim",
+    "affiliation": "Mandalorians",
+    "era": "Clone Wars, Mando Era",
+    "notes": "Beskar home",
+    "x": 80.0,
+    "y": -10.0
+  },
+  {
+    "id": 33,
+    "name": "Concordia",
+    "region": "Outer Rim",
+    "affiliation": "Mandalorians",
+    "era": "Clone Wars",
+    "notes": "Mandalore moon",
+    "x": 85.0,
+    "y": -5.0
+  },
+  {
+    "id": 34,
+    "name": "Nevarro",
+    "region": "Outer Rim",
+    "affiliation": "Independent",
+    "era": "Mando Era",
+    "notes": "The Mandalorian hub",
+    "x": -150.0,
+    "y": -10.0
+  },
+  {
+    "id": 35,
+    "name": "Ryloth",
+    "region": "Outer Rim",
+    "affiliation": "Republic/Twilek",
+    "era": "Clone Wars",
+    "notes": "Twi'lek home",
+    "x": -10.0,
+    "y": 30.0
+  },
+  {
+    "id": 36,
+    "name": "Taris",
+    "region": "Outer Rim",
+    "affiliation": "Republic",
+    "era": "Legends",
+    "notes": "KOTOR world",
+    "x": 60.0,
+    "y": -80.0
+  },
+  {
+    "id": 37,
+    "name": "Onderon",
+    "region": "Mid Rim",
+    "affiliation": "Republic",
+    "era": "Clone Wars",
+    "notes": "Forest world",
+    "x": 30.0,
+    "y": 20.0
+  },
+  {
+    "id": 38,
+    "name": "Kessel",
+    "region": "Outer Rim",
+    "affiliation": "Hutt/Empire",
+    "era": "Solo",
+    "notes": "Spice mines",
+    "x": -120.0,
+    "y": -70.0
+  },
+  {
+    "id": 39,
+    "name": "Ord Mantell",
+    "region": "Mid Rim",
+    "affiliation": "Republic",
+    "era": "Clone Wars, Rebels",
+    "notes": "Smuggler haven",
+    "x": -80.0,
+    "y": -40.0
+  },
+  {
+    "id": 40,
+    "name": "Sullust",
+    "region": "Outer Rim",
+    "affiliation": "Rebellion",
+    "era": "Original",
+    "notes": "Volcanic caverns",
+    "x": -90.0,
+    "y": -10.0
+  },
+  {
+    "id": 41,
+    "name": "Eriadu",
+    "region": "Outer Rim",
+    "affiliation": "Empire",
+    "era": "Original",
+    "notes": "Tarkin's home",
+    "x": -70.0,
+    "y": 20.0
+  },
+  {
+    "id": 42,
+    "name": "Bothawui",
+    "region": "Mid Rim",
+    "affiliation": "Bothan",
+    "era": "Original, Legends",
+    "notes": "Bothans!",
+    "x": -30.0,
+    "y": 50.0
+  },
+  {
+    "id": 43,
+    "name": "Serenno",
+    "region": "Outer Rim",
+    "affiliation": "Separatists",
+    "era": "Clone Wars",
+    "notes": "Count Dooku's home",
+    "x": 100.0,
+    "y": 20.0
+  },
+  {
+    "id": 44,
+    "name": "Mygeeto",
+    "region": "Outer Rim",
+    "affiliation": "Separatists",
+    "era": "Prequel",
+    "notes": "Icy finance world",
+    "x": 150.0,
+    "y": 40.0
+  },
+  {
+    "id": 45,
+    "name": "Polis Massa",
+    "region": "Outer Rim",
+    "affiliation": "Independent",
+    "era": "Prequel",
+    "notes": "Asteroid field base",
+    "x": -130.0,
+    "y": 60.0
+  },
+  {
+    "id": 46,
+    "name": "Nal Hutta",
+    "region": "Outer Rim",
+    "affiliation": "Hutt Cartel",
+    "era": "Original, Clone Wars",
+    "notes": "Hutt homeworld",
+    "x": -170.0,
+    "y": 30.0
+  },
+  {
+    "id": 47,
+    "name": "Nar Shaddaa",
+    "region": "Outer Rim",
+    "affiliation": "Hutt Cartel",
+    "era": "Original, Legends",
+    "notes": "Smuggler moon",
+    "x": -175.0,
+    "y": 32.0
+  },
+  {
+    "id": 48,
+    "name": "Cantonica",
+    "region": "Mid Rim",
+    "affiliation": "Independent",
+    "era": "Sequel",
+    "notes": "Canto Bight casino world",
+    "x": -5.0,
+    "y": -85.0
+  },
+  {
+    "id": 49,
+    "name": "Exegol",
+    "region": "Unknown Regions",
+    "affiliation": "Sith Eternal",
+    "era": "Sequel",
+    "notes": "Hidden Sith world",
+    "x": 120.0,
+    "y": -140.0
+  },
+  {
+    "id": 50,
+    "name": "Ahsoka's Seatos",
+    "region": "Mid Rim",
+    "affiliation": "New Republic",
+    "era": "Mando Era",
+    "notes": "Ancient map site",
+    "x": 30.0,
+    "y": 100.0
+  },
+  {
+    "id": 51,
+    "name": "Rishi",
+    "region": "Outer Rim",
+    "affiliation": "Republic",
+    "era": "Clone Wars",
+    "notes": "Rishi moon outpost",
+    "x": 0.0,
+    "y": 70.0
+  },
+  {
+    "id": 52,
+    "name": "Eadu",
+    "region": "Outer Rim",
+    "affiliation": "Empire",
+    "era": "Rogue One",
+    "notes": "Stormy research world",
+    "x": -55.0,
+    "y": 130.0
+  }
+]
