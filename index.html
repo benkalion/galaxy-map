@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <title>Star Wars Galaxy — North Star V1</title>
+  <title>Star Wars Galaxy — v3</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <div class="brand">
-    <h1>STAR WARS</h1>
-    <div class="sub">Galaxy Map</div>
+    <span class="sw">STAR WARS</span>
+    <span class="sub">GALAXY MAP</span>
   </div>
   <div class="controls">
-    <input id="search" type="search" placeholder="Search planets" aria-label="Search planets" autocomplete="off">
-    <select id="regionFilter" aria-label="Filter region">
+    <input id="search" type="search" placeholder="Search planets…" aria-label="Search planets" autocomplete="off">
+    <select id="regionFilter" aria-label="Filter by region">
       <option value="">All regions</option>
       <option>Deep Core</option><option>Core</option><option>Colonies</option>
       <option>Inner Rim</option><option>Expansion Region</option>
@@ -25,20 +25,22 @@
 </header>
 
 <main>
-  <div class="mapWrap">
+  <div class="wrap">
     <canvas id="map" role="img" aria-label="Interactive galaxy map"></canvas>
-    <div id="legend">
-      <span class="sw deepcore"></span>Deep Core
-      <span class="sw core"></span>Core
-      <span class="sw colonies"></span>Colonies
-      <span class="sw innerrim"></span>Inner Rim
-      <span class="sw expansion"></span>Expansion
-      <span class="sw midrim"></span>Mid Rim
-      <span class="sw outerrim"></span>Outer Rim
-      <span class="sw unknown"></span>Unknown Regions
-    </div>
+    <div id="gridOverlay"></div>
     <div id="coords">—</div>
+    <div id="legend">
+      <span class="swatch deepcore"></span>Deep Core
+      <span class="swatch core"></span>Core
+      <span class="swatch colonies"></span>Colonies
+      <span class="swatch inner"></span>Inner Rim
+      <span class="swatch exp"></span>Expansion
+      <span class="swatch mid"></span>Mid Rim
+      <span class="swatch outer"></span>Outer Rim
+      <span class="swatch unk"></span>Unknown Regions
+    </div>
   </div>
+
   <aside id="panel" hidden>
     <div class="head"><h2>Planets</h2><button id="closePanel">×</button></div>
     <ul id="list"></ul>
@@ -46,25 +48,33 @@
 </main>
 
 <dialog id="details">
-  <form method="dialog">
+  <form method="dialog" class="datapad">
     <header class="dHead">
-      <h3 id="dName">Planet</h3><button value="close" aria-label="Close">×</button>
+      <div>
+        <div class="aure">AURBESH</div>
+        <h3 id="dName">Planet</h3>
+      </div>
+      <button value="close" aria-label="Close">×</button>
     </header>
     <div class="dBody">
-      <dl>
-        <dt>Region</dt><dd id="dRegion"></dd>
-        <dt>Sector</dt><dd id="dSector"></dd>
-        <dt>Trade routes</dt><dd id="dRoutes"></dd>
-        <dt>Famous person</dt><dd id="dFamous"></dd>
-        <dt>Notes</dt><dd id="dNotes"></dd>
-        <dt>Grid</dt><dd id="dGrid"></dd>
-      </dl>
+      <div class="meta">
+        <div><span>Region:</span> <strong id="dRegion"></strong></div>
+        <div><span>Sector:</span> <strong id="dSector"></strong></div>
+        <div><span>Grid:</span> <strong id="dGrid"></strong></div>
+      </div>
+      <blockquote id="dQuote">“”</blockquote>
+      <p id="dNotes" class="notes"></p>
+      <div class="routes">
+        <div class="rHead">Trade routes</div>
+        <ul id="dRoutes"></ul>
+      </div>
+      <div class="famous"><span>Famous:</span> <span id="dFamous"></span></div>
     </div>
   </form>
 </dialog>
 
 <footer>
-  <small>North Star V1 • pinch/scroll to zoom, drag to pan, tap/click planets</small>
+  <small>v3 — drag to pan, pinch/scroll to zoom, tap/click to open a datapad</small>
   <button id="togglePanel">List</button>
 </footer>
 
