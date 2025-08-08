@@ -4,8 +4,8 @@ const ROUTES = [{"name": "Perlemian Trade Route", "color": "#ffd166", "pts": [[-
 
 // Colors for CANVAS (explicit hex so canvas understands them)
 const COLORS = {
-  deep:"#ffe88a", core:"#ff89c6", colonies:"#ffb370", inner:"#d990ff",
-  exp:"#6bf0d8", mid:"#7fb7ff", outer:"#6580ff", unk:"#c59cff"
+  deep:'#f0e08f', core:'#9e86b9', colonies:'#d39265', inner:'#caa6a0',
+  exp:'#c78ab1', mid:'#78aeca', outer:'#8cb7d6', unk:'#1a2230'
 };
 const REG_COL = {
   "Deep Core": COLORS.deep, "Core": COLORS.core, "Colonies": COLORS.colonies, "Inner Rim": COLORS.inner,
@@ -65,51 +65,39 @@ function drawStars(){
 }
 
 // regions
-
 function regionShapes(){
-  // Asymmetric wedges (slim left, wide right)
-  return [
-    {name:'Deep Core', r0:0, r1:90},
-    {name:'Core', r0:90, r1:180},
-    {name:'Colonies', r0:180, r1:280},
-    {name:'Inner Rim', r0:280, r1:380},
-    {name:'Expansion Region', r0:380, r1:520},
-    {name:'Mid Rim', r0:520, r1:680},
-    {name:'Outer Rim', r0:680, r1:860},
-  ];
+  const shapes=[];
+  const push=(name,rx,ry,skew,wiggle)=>shapes.push({name,rx,ry,skew,wiggle});
+  push('Deep Core',90,70,-6,18);
+  push('Core',170,130,-10,20);
+  push('Colonies',280,210,-14,22);
+  push('Inner Rim',380,280,-16,24);
+  push('Expansion Region',520,360,-14,22);
+  push('Mid Rim',670,450,-10,18);
+  push('Outer Rim',840,560,-6,16);
+  return shapes;
 }
 
 function drawRegion(shape){
   const color = REG_COL[shape.name];
-  const theta0 = -Math.PI*0.90, theta1 = Math.PI*0.90;
-  const steps = 96;
-  function rInner(theta){ return (shape.r0 * (0.90 + 0.10*Math.cos(theta))) * state.scale; }
-  function rOuter(theta){ return (shape.r1 * (0.72 + 0.28*(1 + Math.cos(theta))/2)) * state.scale; }
-
-  ctx.save(); ctx.beginPath(); ctx.translate(tx(0), ty(0));
-  for(let i=0;i<=steps;i++){ const t=theta0+(theta1-theta0)*(i/steps); const r=rOuter(t); const x=Math.cos(t)*r, y=Math.sin(t)*r; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
-  for(let i=steps;i>=0;i--){ const t=theta0+(theta1-theta0)*(i/steps); const r=rInner(t); const x=Math.cos(t)*r, y=Math.sin(t)*r; ctx.lineTo(x,y); }
+  ctx.save(); ctx.translate(tx(0), ty(0)); ctx.beginPath();
+  const rx=shape.rx*state.scale, ry=shape.ry*state.scale;
+  const skew = shape.skew*Math.PI/180;
+  for(let a=0;a<=Math.PI*2+0.0001;a+=Math.PI/64){
+    const ca=Math.cos(a), sa=Math.sin(a);
+    // Asymmetry: compress left (a≈π), expand right (a≈0)
+    const kx = 0.72 + 0.28*(1 + Math.cos(a))/2;  // 0.72..1.0
+    const ky = 0.90 + 0.10*Math.cos(a);          // subtle vertical variation
+    let x = ca*rx*kx + Math.sin(a*3)*shape.wiggle*state.scale;
+    let y = sa*ry*ky + Math.cos(a*2)*(shape.wiggle*0.7)*state.scale;
+    const sx = x + Math.tan(skew)*y, sy=y;
+    if(a===0) ctx.moveTo(sx,sy); else ctx.lineTo(sx,sy);
+  }
   ctx.closePath();
   ctx.fillStyle = withAlpha(color, 0.22);
   ctx.strokeStyle = withAlpha(color, 0.8);
-  ctx.lineWidth = 2; ctx.fill(); ctx.stroke();
-  ctx.restore();
-}
-
-function drawRegionLabels(){
-  ctx.save();
-  const rings = regionShapes();
-  const theta = 0;
-  rings.forEach(ring=>{
-    const rMid = ((ring.r0+ring.r1)/2) * 0.88 * state.scale;
-    const px = tx(0) + Math.cos(theta)*rMid;
-    const py = ty(0) + Math.sin(theta)*rMid;
-    const size = Math.max(12, Math.min(28, 12 + 3*Math.log2(state.scale+1)));
-    ctx.font = `bold ${size}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-    ctx.fillStyle = withAlpha('#eef3ff', 0.9);
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(ring.name.toUpperCase(), px, py);
-  });
+  ctx.lineWidth = 2;
+  ctx.fill(); ctx.stroke();
   ctx.restore();
 }
   ctx.closePath();
@@ -322,6 +310,7 @@ function render(){
 
 
 async function init(){
+  // load planets from external file to keep index.html clean
   try{
     const res = await fetch('planets.json', {cache:'no-store'});
     const json = await res.json();
@@ -337,3 +326,23 @@ async function init(){
 }
 window.addEventListener('resize',render);
 init();
+
+
+function drawRegionLabels(){
+  const shapes = regionShapes();
+  ctx.save();
+  const theta = 0; // label on the east side
+  shapes.forEach(shape=>{
+    const name = shape.name;
+    // place label roughly at 0.85 of the ring radius on the east side
+    const rMid = shape.rx * 0.78; // world units
+    const px = tx(rMid), py = ty(0);
+    const size = Math.max(12, Math.min(28, 12 + 3*Math.log2(state.scale+1)));
+    ctx.font = `bold ${size}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+    ctx.fillStyle = withAlpha('#eef3ff', 0.9);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(name.toUpperCase(), px, py);
+  });
+  ctx.restore();
+}
+
