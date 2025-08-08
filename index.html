@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <title>Star Wars Galaxy — v4</title>
+  <title>Star Wars Galaxy — v5</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
   </div>
   <div class="controls">
     <input id="search" type="search" placeholder="Search planets…" aria-label="Search planets" autocomplete="off">
-    <select id="regionFilter" aria-label="Filter by region">
+    <select id="regionFilter" aria-label="Jump to region">
       <option value="">All regions</option>
       <option>Deep Core</option><option>Core</option><option>Colonies</option>
       <option>Inner Rim</option><option>Expansion Region</option>
@@ -30,15 +30,20 @@
     <div id="gridOverlay"></div>
     <div id="coords">—</div>
     <div id="legend">
-      <span class="swatch deepcore"></span>Deep Core
-      <span class="swatch core"></span>Core
-      <span class="swatch colonies"></span>Colonies
-      <span class="swatch inner"></span>Inner Rim
-      <span class="swatch exp"></span>Expansion
-      <span class="swatch mid"></span>Mid Rim
-      <span class="swatch outer"></span>Outer Rim
-      <span class="swatch unk"></span>Unknown Regions
+      <div class="legend-row">
+        <span class="swatch deepcore"></span>Deep Core
+        <span class="swatch core"></span>Core
+        <span class="swatch colonies"></span>Colonies
+        <span class="swatch inner"></span>Inner Rim
+      </div>
+      <div class="legend-row">
+        <span class="swatch exp"></span>Expansion
+        <span class="swatch mid"></span>Mid Rim
+        <span class="swatch outer"></span>Outer Rim
+        <span class="swatch unk"></span>Unknown Regions
+      </div>
     </div>
+    <div id="routesBar"></div>
   </div>
 
   <aside id="panel" hidden>
@@ -53,14 +58,14 @@
       <div class="title">
         <div class="aure">AUREBESH DATAPAD</div>
         <h3 id="dName">Planet</h3>
+        <span id="dRegionTag" class="tag">REGION</span>
       </div>
       <button value="close" aria-label="Close">×</button>
     </header>
     <div class="dBody">
       <div class="meta">
-        <div><span>Region:</span> <strong id="dRegion"></strong></div>
-        <div><span>Sector:</span> <strong id="dSector"></strong></div>
         <div><span>Grid:</span> <strong id="dGrid"></strong></div>
+        <div><span>Famous:</span> <strong id="dFamous"></strong></div>
       </div>
       <blockquote id="dQuote"></blockquote>
       <p id="dNotes" class="notes"></p>
@@ -68,14 +73,15 @@
         <div class="rHead">Trade routes</div>
         <ul id="dRoutes"></ul>
       </div>
-      <div class="famous"><span>Famous:</span> <span id="dFamous"></span></div>
     </div>
   </form>
 </dialog>
 
 <footer>
-  <small>v4 — drag to pan, pinch/scroll to zoom, tap/click to open a datapad</small>
-  <button id="togglePanel">List</button>
+  <small>v5 — drag to pan, pinch/scroll to zoom, tap planets, click route names</small>
+  <div class="footer-actions">
+    <button id="togglePanel">List</button>
+  </div>
 </footer>
 
 <script src="app.js"></script>
