@@ -33,6 +33,10 @@ main{display:grid;grid-template-columns:1fr auto;min-height:calc(100% - 56px)}
 #routesBar .routeTag{padding:.2rem .5rem;border:1px solid #2f5498;border-radius:.5rem;background:rgba(10,25,60,.6);cursor:pointer}
 #routesBar .routeTag.active{box-shadow:0 0 0 1px #aee6ff;}
 
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;background:linear-gradient(180deg,transparent,transparent);}
+#overlay.error{background:linear-gradient(180deg,rgba(180,30,30,.08),rgba(180,30,30,.1));}
+#ovText{padding:.4rem .6rem;border:1px solid #224a92;background:rgba(10,25,60,.65);border-radius:.5rem}
+
 aside{width:320px;max-width:92vw;border-left:1px solid #13336f;background:linear-gradient(180deg,#0a1f4f,#091940)}
 aside[hidden]{display:none}
 aside .head{display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;border-bottom:1px solid #13336f}

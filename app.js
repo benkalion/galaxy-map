@@ -1,7 +1,8 @@
-/* v5 — deeper zoom, better sectors, clickable trade routes, improved popups, dynamic region jumps */
+/* v5.1 — robust loading & render order, safer route labels, bounds-correct camera */
 const canvas = document.getElementById('map');
 const ctx = canvas.getContext('2d', {alpha:false});
 let DPR = Math.max(1, window.devicePixelRatio||1); let W=0,H=0;
+const overlay = document.getElementById('overlay'); const ovText=document.getElementById('ovText');
 
 // Grid & world
 const GRID = { cols:18, rows:21, letters:'CDEFGHIJKLMNOPQRSTU'.split('') };
@@ -9,11 +10,11 @@ const BOUNDS = { minX:-360, maxX:360, minY:-320, maxY:320 };
 
 // dynamic camera min scale so whole galaxy fits but not too small
 let MIN_SCALE = 0.45; // updated in resize()
-const state = { cx:-20, cy:-8, scale:4.6, hover:null, sel:null, planets:[], routes:[], sectorShapes:[], selectedRoute:null };
+const state = { cx:-20, cy:-8, scale:4.6, hover:null, sel:null, planets:[], routes:[], sectorShapes:[], selectedRoute:null, ready:false };
 
-// palettes (closer to poster hues)
+// palettes
 const SECTOR = {
-  'Deep Core':'rgba(255,255,255,.55)', // bright center
+  'Deep Core':'rgba(255,255,255,.55)',
   'Core':'rgba(255,230,120,.48)',
   'Colonies':'rgba(255,160,80,.38)',
   'Inner Rim':'rgba(255,150,230,.34)',
@@ -35,7 +36,7 @@ function resize(){
   const sx = W / (BOUNDS.maxX-BOUNDS.minX);
   const sy = H / (BOUNDS.maxY-BOUNDS.minY);
   MIN_SCALE = Math.min(sx, sy)*0.92;
-  render();
+  if(state.ready) render();
 }
 window.addEventListener('resize', resize);
 
@@ -44,14 +45,20 @@ function w2s(x,y){ return [(x-state.cx)*state.scale + W/2, (y-state.cy)*state.sc
 function s2w(x,y){ return [(x - W/2)/state.scale + state.cx, (y - H/2)/state.scale + state.cy]; }
 function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
 
+function safeRender(stepFn){
+  try{ stepFn(); } catch(err){ console.error(err); overlay.classList.add('error'); ovText.textContent = 'Render error — check console'; }
+}
+
 function render(){
-  drawBackground();
-  drawSectorsWorld();  // world-anchored
-  drawSpiralArms();
-  drawRoutes();
-  drawPlanets();
-  drawLabels();
-  drawGridScreen();    // edge labels based on viewport
+  overlay.classList.remove('error'); ovText.textContent = '';
+  // draw order
+  safeRender(drawBackground);
+  safeRender(drawSectorsWorld);
+  safeRender(drawSpiralArms);
+  safeRender(drawRoutes);
+  safeRender(drawPlanets);
+  safeRender(drawLabels);
+  safeRender(drawGridScreen);
 }
 
 function drawBackground(){
@@ -75,21 +82,15 @@ function drawBackground(){
 // ===== Sector shapes in world coordinates, irregular =====
 function buildSectors(){
   const cx=-20, cy=0;
-  // radius function by angle (radians), with bulges for each ring
-  const mk = (base, bumps)=>{
-    return (t)=>{
-      let r=base;
-      for(const b of bumps){
-        const dt = Math.atan2(Math.sin(t-b.a), Math.cos(t-b.a)); // shortest angle
-        r += b.h * Math.exp(-(dt*dt)/(2*b.w*b.w));
-      }
-      return r * bScale(t);
-    };
-  };
-  // slight spiral-ish squish like poster
   const bScale = (t)=> (1 + 0.06*Math.sin(t*2) - 0.03*Math.cos(t*3));
-
-  // Bumps tuned by eye to approximate poster
+  const mk = (base, bumps)=> (t)=>{
+    let r=base;
+    for(const b of bumps){
+      const dt = Math.atan2(Math.sin(t-b.a), Math.cos(t-b.a));
+      r += b.h * Math.exp(-(dt*dt)/(2*b.w*b.w));
+    }
+    return r * bScale(t);
+  };
   const deep = mk(60,  [{a:0.5,h:6,w:.9},{a:3.6,h:4,w:.7}]);
   const core = mk(102, [{a:0.2,h:18,w:.8},{a:2.7,h:10,w:.9},{a:4.7,h:8,w:.7}]);
   const colonies = mk(142,[{a:.1,h:24,w:.9},{a:2.4,h:16,w:1.0},{a:5.0,h:10,w:.8}]);
@@ -119,15 +120,14 @@ function buildSectors(){
     {name:'Outer Rim', fill:SECTOR['Outer Rim'], pts:blob(outer,1.22,1.13)}
   ];
 
-  // Unknown Regions: big asymmetric shape on left hugging rings
+  // Unknown Regions
   const UR=[]; const steps=140;
   for(let i=0;i<=steps;i++){
-    const t = -Math.PI*0.86 + (i/steps)*Math.PI*1.42; // left-side arc only
-    const r = outer(t)*1.04; // slightly outside outer rim
+    const t = -Math.PI*0.86 + (i/steps)*Math.PI*1.42; // left arc
+    const r = outer(t)*1.04;
     const x=cx+Math.cos(t)*r*1.02, y=cy+Math.sin(t)*r*.90;
     UR.push([x,y]);
   }
-  // close wedge to the far left boundary
   UR.push([BOUNDS.minX, BOUNDS.maxY]);
   UR.push([BOUNDS.minX, BOUNDS.minY]);
   state.sectorShapes.push({name:'Unknown Regions', fill:SECTOR['Unknown Regions'], pts:UR});
@@ -140,14 +140,12 @@ function drawSectorsWorld(){
     s.pts.forEach((p,i)=>{ const [x,y]=w2s(p[0],p[1]); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
     ctx.closePath(); ctx.fill(); ctx.restore();
   }
-
-  // labels in world space
+  // labels
   const labels=[
     ['DEEP CORE', -20, -8], ['CORE', -10, 10], ['COLONIES', 10, 36], ['INNER RIM', 30, 70],
     ['EXPANSION', 58, 108], ['MID RIM', 92, 142], ['OUTER RIM', 142, 182]
   ];
   for(const L of labels){ const [sx,sy]=w2s(L[1],L[2]); textGlow(L[0], sx, sy, 14); }
-  // Unknown Regions label at left
   textGlow('UNKNOWN REGIONS', 30, H*.45, 18);
 }
 // =============================================
@@ -165,6 +163,7 @@ function drawSpiralArms(){
   ctx.restore();
 }
 
+// --- ROUTES ---
 function drawRoutes(){
   const bar=document.getElementById('routesBar'); if(!bar.dataset.init){
     bar.dataset.init='1'; bar.innerHTML='';
@@ -174,27 +173,36 @@ function drawRoutes(){
       bar.appendChild(btn);
     });
   }
-  // highlight if selected
   const btns=[...document.querySelectorAll('#routesBar .routeTag')];
   btns.forEach((b,i)=> b.classList.toggle('active', state.selectedRoute===i));
 
   ctx.save(); ctx.lineCap='round'; ctx.globalCompositeOperation='lighter';
   state.routes.forEach((r,idx)=>{
+    if(!r.points || r.points.length<4) return;
     const isSel = state.selectedRoute===idx;
     ctx.shadowBlur=isSel?18:10; ctx.shadowColor=r.color; ctx.strokeStyle=r.color; ctx.lineWidth=isSel?5:3;
     ctx.beginPath();
     const pts = r.points.map(p=>w2s(p[0],p[1]));
     ctx.moveTo(pts[0][0],pts[0][1]);
-    for(let i=1;i<pts.length;i+=3){ const a=pts[i], b=pts[i+1], c=pts[i+2]; ctx.bezierCurveTo(a[0],a[1],b[0],b[1],c[0],c[1]); }
+    for(let i=1;i<pts.length;i+=3){
+      const a=pts[i], b=pts[i+1], c=pts[i+2]; if(!c) break;
+      ctx.bezierCurveTo(a[0],a[1],b[0],b[1],c[0],c[1]);
+    }
     ctx.stroke();
 
-    // draw route name near its midpoint
-    const mid = bezierPoint(pts[Math.floor((pts.length-1)/3)*3-3], pts[Math.floor((pts.length-1)/3)*3-2], pts[Math.floor((pts.length-1)/3)*3-1], pts[Math.floor((pts.length-1)/3)*3], 0.5);
-    textGlow(r.name, mid[0]+6, mid[1]-6, 12);
+    // Label: sample along the path to get a midpoint in view
+    const mid = approxMidpoint(pts);
+    if(mid) textGlow(r.name, mid[0]+6, mid[1]-6, 12);
   });
   ctx.restore();
 }
+function approxMidpoint(pts){
+  if(!pts||pts.length<2) return null;
+  const m = Math.floor(pts.length/2);
+  return pts[m];
+}
 
+// --- PLANETS ---
 function drawPlanets(){
   for(const p of state.planets){
     const [sx,sy]=w2s(p.x,p.y);
@@ -220,7 +228,7 @@ function drawLabels(){
   ctx.restore();
 }
 
-// Grid overlay with dynamic labels based on viewport
+// Grid overlay with dynamic labels
 function drawGridScreen(){
   const overlay = document.getElementById('gridOverlay');
   const [wminx,wminy]=s2w(0,0); const [wmaxx,wmaxy]=s2w(W,H);
@@ -261,6 +269,7 @@ function textGlow(txt, x, y, size){
   ctx.restore();
 }
 
+// Interaction
 let dragging=false,lx=0,ly=0;
 canvas.addEventListener('mousedown',e=>{ dragging=true; lx=e.clientX; ly=e.clientY; });
 window.addEventListener('mouseup',()=>dragging=false);
@@ -270,13 +279,12 @@ window.addEventListener('mousemove',e=>{
 });
 canvas.addEventListener('wheel',e=>{
   e.preventDefault();
-  const rect=canvas.getBoundingClientRect(); const f = Math.pow(1.05, -Math.sign(e.deltaY)); // very fine zoom steps
+  const rect=canvas.getBoundingClientRect(); const f = Math.pow(1.05, -Math.sign(e.deltaY)); // fine steps
   zoomAt(e.clientX-rect.left, e.clientY-rect.top, f);
 },{passive:false});
 canvas.addEventListener('click',e=>{
   const rect=canvas.getBoundingClientRect();
   const mx=e.clientX-rect.left, my=e.clientY-rect.top;
-  // click route name proximity? we draw names near middle; easier: use tag buttons in routesBar
   const id=pick(mx,my); if(id!=null) selectPlanet(id);
 });
 
@@ -295,7 +303,7 @@ canvas.addEventListener('touchend',e=>{ if(e.touches.length===0) touch=null; },{
 
 function zoomAt(mx,my,f){
   const [wx,wy]=s2w(mx,my);
-  state.scale*=f; state.scale = clamp(state.scale, MIN_SCALE, 5.6); // allow lots of zoom-out only to min that fits galaxy; zoom-in up to 5.6
+  state.scale*=f; state.scale = clamp(state.scale, MIN_SCALE, 5.6);
   const [wx2,wy2]=s2w(mx,my); state.cx += (wx-wx2); state.cy += (wy-wy2);
   render();
 }
@@ -354,11 +362,9 @@ function flyTo(x,y,s){
 // Sector focus by name
 function focusSector(name){
   const s = state.sectorShapes.find(s=>s.name===name); if(!s) return;
-  // compute bbox
   let minx=Infinity,miny=Infinity,maxx=-Infinity,maxy=-Infinity;
   s.pts.forEach(([x,y])=>{ if(x<minx)minx=x; if(y<miny)miny=y; if(x>maxx)maxx=x; if(y>maxy)maxy=y; });
   const cx=(minx+maxx)/2, cy=(miny+maxy)/2;
-  // scale so bbox fits 60% of screen for context
   const sx = (W*0.6)/(maxx-minx), sy = (H*0.6)/(maxy-miny);
   const sc = Math.min(5.4, Math.max(MIN_SCALE, Math.min(sx,sy)));
   flyTo(cx,cy,sc);
@@ -384,7 +390,6 @@ function buildRoutes(planets){
 function focusRouteByName(name){
   const idx = state.routes.findIndex(r=>r.name===name); if(idx<0) return;
   state.selectedRoute = idx;
-  // compute route bbox
   const r=state.routes[idx];
   let minx=Infinity,miny=Infinity,maxx=-Infinity,maxy=-Infinity;
   r.points.forEach(([x,y])=>{ if(x<minx)minx=x; if(y<miny)miny=y; if(x>maxx)maxx=x; if(y>maxy)maxy=y; });
@@ -392,14 +397,6 @@ function focusRouteByName(name){
   const sx = (W*0.7)/(maxx-minx), sy=(H*0.7)/(maxy-miny);
   flyTo(cx,cy,Math.min(5.2,Math.max(MIN_SCALE,Math.min(sx,sy))));
   render();
-}
-
-// geometry utils
-function bezierPoint(p0,p1,p2,p3,t){
-  const u=1-t;
-  const x=u*u*u*p0[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0];
-  const y=u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1];
-  return [x,y];
 }
 
 // utils
@@ -416,22 +413,36 @@ function gridToWorld(grid){
   return [x,y];
 }
 
-// init
-fetch('planets.json').then(r=>r.json()).then(data=>{
+// ---- INIT & LOADING ----
+function initAfterData(){
   let id=1;
-  for(const p of data.planets){
+  for(const p of state.planets){
     const [gx,gy]=gridToWorld(p.grid||'M-11');
     const ox=(p.offset&&p.offset[0])||0, oy=(p.offset&&p.offset[1])||0;
     p.x=gx+ox; p.y=gy+oy; p.id=id++;
   }
-  state.planets=data.planets; state.routes=buildRoutes(data.planets);
+  state.routes=buildRoutes(state.planets);
   buildSectors();
-  resize(); refreshList(); render();
+  resize();
+  refreshList();
+  state.ready=true;
+  render();
+}
 
-  canvas.onmousemove = (e)=>{
-    const rect = canvas.getBoundingClientRect(); const [wx,wy]=s2w(e.clientX-rect.left, e.clientY-rect.top);
-    const col = Math.min(GRID.cols-1, Math.max(0, Math.floor((wx-BOUNDS.minX)/(BOUNDS.maxX-BOUNDS.minX)*GRID.cols)));
-    const row = Math.min(GRID.rows-1, Math.max(0, Math.floor((wy-BOUNDS.minY)/(BOUNDS.maxY-BOUNDS.minY)*GRID.rows)));
-    document.getElementById('coords').textContent = `${GRID.letters[col]}-${row+1}`;
-  };
-});
+fetch('planets.json')
+  .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(data=>{ state.planets = data.planets||[]; initAfterData(); overlay.style.display='none'; })
+  .catch(err=>{
+    console.error('Failed to load planets.json', err);
+    overlay.classList.add('error');
+    ovText.textContent = 'Error loading planets.json';
+  });
+
+// live coords readout
+canvas.onmousemove = (e)=>{
+  if(!state.ready) return;
+  const rect = canvas.getBoundingClientRect(); const [wx,wy]=s2w(e.clientX-rect.left, e.clientY-rect.top);
+  const col = Math.min(GRID.cols-1, Math.max(0, Math.floor((wx-BOUNDS.minX)/(BOUNDS.maxX-BOUNDS.minX)*GRID.cols)));
+  const row = Math.min(GRID.rows-1, Math.max(0, Math.floor((wy-BOUNDS.minY)/(BOUNDS.maxY-BOUNDS.minY)*GRID.rows)));
+  document.getElementById('coords').textContent = `${GRID.letters[col]}-${row+1}`;
+};
