@@ -100,13 +100,7 @@ function drawRegion(shape){
   ctx.fill(); ctx.stroke();
   ctx.restore();
 }
-  ctx.closePath();
-  ctx.fillStyle = withAlpha(color, 0.22);
-  ctx.strokeStyle = withAlpha(color, 0.8);
-  ctx.lineWidth = 2;
-  ctx.fill(); ctx.stroke();
-  ctx.restore();
-}
+
 function drawUnknown(){
   const color = REG_COL["Unknown Regions"];
   const pts=[[-860,80],[-800,-20],[-720,-100],[-620,-140],[-560,-110],[-540,-40],[-540,60],[-560,160],[-620,260],[-720,320],[-800,260],[-860,160]];
