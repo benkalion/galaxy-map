@@ -1,21 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Star Wars Galaxy Map - North Star V1</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Star Wars Galaxy — North Star V1</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="galaxy-map"></canvas>
-  <div id="planet-info" class="hidden">
-    <h2 id="planet-name"></h2>
-    <p><strong>Sector:</strong> <span id="planet-sector"></span></p>
-    <p><strong>Famous Person:</strong> <span id="planet-famous"></span></p>
-    <p><strong>Fact:</strong> <span id="planet-fact"></span></p>
-    <p><strong>Trade Route:</strong> <span id="planet-route"></span></p>
-    <button onclick="closeInfo()">Close</button>
+<header>
+  <div class="brand">
+    <h1>STAR WARS</h1>
+    <div class="sub">Galaxy Map</div>
   </div>
-  <script src="app.js"></script>
+  <div class="controls">
+    <input id="search" type="search" placeholder="Search planets" aria-label="Search planets" autocomplete="off">
+    <select id="regionFilter" aria-label="Filter region">
+      <option value="">All regions</option>
+      <option>Deep Core</option><option>Core</option><option>Colonies</option>
+      <option>Inner Rim</option><option>Expansion Region</option>
+      <option>Mid Rim</option><option>Outer Rim</option><option>Unknown Regions</option>
+    </select>
+    <button id="reset">Reset</button>
+  </div>
+</header>
+
+<main>
+  <div class="mapWrap">
+    <canvas id="map" role="img" aria-label="Interactive galaxy map"></canvas>
+    <div id="legend">
+      <span class="sw deepcore"></span>Deep Core
+      <span class="sw core"></span>Core
+      <span class="sw colonies"></span>Colonies
+      <span class="sw innerrim"></span>Inner Rim
+      <span class="sw expansion"></span>Expansion
+      <span class="sw midrim"></span>Mid Rim
+      <span class="sw outerrim"></span>Outer Rim
+      <span class="sw unknown"></span>Unknown Regions
+    </div>
+    <div id="coords">—</div>
+  </div>
+  <aside id="panel" hidden>
+    <div class="head"><h2>Planets</h2><button id="closePanel">×</button></div>
+    <ul id="list"></ul>
+  </aside>
+</main>
+
+<dialog id="details">
+  <form method="dialog">
+    <header class="dHead">
+      <h3 id="dName">Planet</h3><button value="close" aria-label="Close">×</button>
+    </header>
+    <div class="dBody">
+      <dl>
+        <dt>Region</dt><dd id="dRegion"></dd>
+        <dt>Sector</dt><dd id="dSector"></dd>
+        <dt>Trade routes</dt><dd id="dRoutes"></dd>
+        <dt>Famous person</dt><dd id="dFamous"></dd>
+        <dt>Notes</dt><dd id="dNotes"></dd>
+        <dt>Grid</dt><dd id="dGrid"></dd>
+      </dl>
+    </div>
+  </form>
+</dialog>
+
+<footer>
+  <small>North Star V1 • pinch/scroll to zoom, drag to pan, tap/click planets</small>
+  <button id="togglePanel">List</button>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>

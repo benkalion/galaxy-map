@@ -1,11 +1,769 @@
-[
-  {
-    "name": "Coruscant",
-    "sector": "Core",
-    "famous": "Palpatine",
-    "fact": "Capital of the Republic and later the Empire",
-    "tradeRoute": "Perlemian Trade Route",
-    "x": 0.5,
-    "y": 0.5
-  }
-]
+{
+  "planets": [
+    {
+      "name": "Coruscant",
+      "region": "Core",
+      "sector": "Corusca",
+      "grid": "L-9",
+      "offset": [
+        -10,
+        0
+      ],
+      "famous": "Palpatine, Padm\u00e9",
+      "routes": [
+        "Perlemian Trade Route",
+        "Hydian Way"
+      ],
+      "featured": true,
+      "notes": "Galactic capital."
+    },
+    {
+      "name": "Alderaan",
+      "region": "Core",
+      "sector": "Alderaan",
+      "grid": "M-10",
+      "offset": [
+        -15,
+        10
+      ],
+      "famous": "Leia Organa",
+      "routes": [],
+      "featured": true
+    },
+    {
+      "name": "Corellia",
+      "region": "Core",
+      "sector": "Corellian",
+      "grid": "M-11",
+      "offset": [
+        -2,
+        -12
+      ],
+      "famous": "Han Solo",
+      "routes": [
+        "Corellian Run"
+      ],
+      "featured": true
+    },
+    {
+      "name": "Chandrila",
+      "region": "Core",
+      "sector": "Bormea",
+      "grid": "L-9",
+      "offset": [
+        12,
+        -20
+      ],
+      "famous": "Mon Mothma",
+      "routes": []
+    },
+    {
+      "name": "Brentaal",
+      "region": "Core",
+      "sector": "Bormea",
+      "grid": "L-9",
+      "offset": [
+        -32,
+        6
+      ],
+      "famous": "Trade world",
+      "routes": [
+        "Perlemian Trade Route"
+      ],
+      "featured": true
+    },
+    {
+      "name": "Cato Neimoidia",
+      "region": "Colonies",
+      "sector": "Quellor",
+      "grid": "N-11",
+      "offset": [
+        -18,
+        6
+      ],
+      "famous": "Poggle allies",
+      "routes": []
+    },
+    {
+      "name": "Kuat",
+      "region": "Colonies",
+      "sector": "Kuat",
+      "grid": "L-9",
+      "offset": [
+        46,
+        8
+      ],
+      "famous": "Kuat Drive Yards",
+      "routes": []
+    },
+    {
+      "name": "Duro",
+      "region": "Colonies",
+      "sector": "Duro",
+      "grid": "M-11",
+      "offset": [
+        28,
+        18
+      ],
+      "famous": "Duros homeworld",
+      "routes": []
+    },
+    {
+      "name": "Commenor",
+      "region": "Colonies",
+      "sector": "Churnis",
+      "grid": "N-10",
+      "offset": [
+        -10,
+        10
+      ],
+      "famous": "Trade hub",
+      "routes": []
+    },
+    {
+      "name": "Bothawui",
+      "region": "Mid Rim",
+      "sector": "Bothan",
+      "grid": "R-14",
+      "offset": [
+        -60,
+        0
+      ],
+      "famous": "Bothans",
+      "routes": []
+    },
+    {
+      "name": "Ord Mantell",
+      "region": "Mid Rim",
+      "sector": "Bright Jewel",
+      "grid": "L-7",
+      "offset": [
+        -10,
+        -10
+      ],
+      "famous": "Scrapyards",
+      "routes": []
+    },
+    {
+      "name": "Mon Cala",
+      "region": "Mid Rim",
+      "sector": "Calamari",
+      "grid": "U-6",
+      "offset": [
+        -40,
+        10
+      ],
+      "famous": "Admiral Ackbar",
+      "routes": []
+    },
+    {
+      "name": "Takodana",
+      "region": "Mid Rim",
+      "sector": "\u2014",
+      "grid": "I-16",
+      "offset": [
+        30,
+        -50
+      ],
+      "famous": "Maz Kanata",
+      "routes": []
+    },
+    {
+      "name": "Cantonica",
+      "region": "Mid Rim",
+      "sector": "Corporate Sector",
+      "grid": "S-4",
+      "offset": [
+        -60,
+        -10
+      ],
+      "famous": "Canto Bight",
+      "routes": []
+    },
+    {
+      "name": "Onderon",
+      "region": "Inner Rim",
+      "sector": "Japrael",
+      "grid": "O-17",
+      "offset": [
+        -40,
+        -34
+      ],
+      "famous": "Saw Gerrera",
+      "routes": []
+    },
+    {
+      "name": "Balmorra",
+      "region": "Colonies",
+      "sector": "\u2014",
+      "grid": "M-10",
+      "offset": [
+        -4,
+        30
+      ],
+      "famous": "Arms world",
+      "routes": []
+    },
+    {
+      "name": "Neimoidia",
+      "region": "Colonies",
+      "sector": "\u2014",
+      "grid": "N-11",
+      "offset": [
+        -6,
+        -16
+      ],
+      "famous": "Bridge worlds",
+      "routes": []
+    },
+    {
+      "name": "Geonosis",
+      "region": "Outer Rim",
+      "sector": "Trel",
+      "grid": "R-16",
+      "offset": [
+        -10,
+        -10
+      ],
+      "famous": "Battle of Geonosis",
+      "routes": [
+        "Corellian Run"
+      ],
+      "featured": true
+    },
+    {
+      "name": "Tatooine",
+      "region": "Outer Rim",
+      "sector": "Arkanis",
+      "grid": "R-16",
+      "offset": [
+        -60,
+        -16
+      ],
+      "famous": "Anakin & Luke Skywalker",
+      "routes": [
+        "Corellian Run"
+      ],
+      "featured": true
+    },
+    {
+      "name": "Ryloth",
+      "region": "Outer Rim",
+      "sector": "Ryloth",
+      "grid": "R-6",
+      "offset": [
+        -20,
+        10
+      ],
+      "famous": "Twi'lek homeworld",
+      "routes": [
+        "Corellian Run"
+      ]
+    },
+    {
+      "name": "Mustafar",
+      "region": "Outer Rim",
+      "sector": "Atravis",
+      "grid": "L-19",
+      "offset": [
+        70,
+        -38
+      ],
+      "famous": "Vader",
+      "routes": [],
+      "featured": true
+    },
+    {
+      "name": "Utapau",
+      "region": "Outer Rim",
+      "sector": "Tarabba",
+      "grid": "M-19",
+      "offset": [
+        35,
+        10
+      ],
+      "famous": "Obi-Wan vs Grievous",
+      "routes": []
+    },
+    {
+      "name": "Felucia",
+      "region": "Outer Rim",
+      "sector": "Thanium",
+      "grid": "R-6",
+      "offset": [
+        -14,
+        74
+      ],
+      "famous": "Order 66",
+      "routes": []
+    },
+    {
+      "name": "Saleucami",
+      "region": "Outer Rim",
+      "sector": "Thanium",
+      "grid": "R-6",
+      "offset": [
+        10,
+        54
+      ],
+      "famous": "Clone Wars",
+      "routes": []
+    },
+    {
+      "name": "Bespin",
+      "region": "Outer Rim",
+      "sector": "Anoat",
+      "grid": "K-18",
+      "offset": [
+        20,
+        60
+      ],
+      "famous": "Cloud City",
+      "routes": [
+        "Rimma Trade Route"
+      ],
+      "featured": true
+    },
+    {
+      "name": "Hoth",
+      "region": "Outer Rim",
+      "sector": "Anoat",
+      "grid": "K-18",
+      "offset": [
+        -60,
+        20
+      ],
+      "famous": "Echo Base",
+      "routes": [
+        "Rimma Trade Route"
+      ],
+      "featured": true
+    },
+    {
+      "name": "Endor",
+      "region": "Outer Rim",
+      "sector": "Moddell",
+      "grid": "H-16",
+      "offset": [
+        0,
+        40
+      ],
+      "famous": "Forest moon",
+      "routes": []
+    },
+    {
+      "name": "Dagobah",
+      "region": "Outer Rim",
+      "sector": "Sluis",
+      "grid": "M-19",
+      "offset": [
+        -20,
+        30
+      ],
+      "famous": "Yoda exile",
+      "routes": []
+    },
+    {
+      "name": "Yavin IV",
+      "region": "Outer Rim",
+      "sector": "Gordian",
+      "grid": "Q-6",
+      "offset": [
+        -50,
+        10
+      ],
+      "famous": "Rebel base",
+      "routes": []
+    },
+    {
+      "name": "Lothal",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "U-7",
+      "offset": [
+        -30,
+        30
+      ],
+      "famous": "Rebels",
+      "routes": []
+    },
+    {
+      "name": "Scarif",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "N-18",
+      "offset": [
+        -30,
+        90
+      ],
+      "famous": "Rogue One battle",
+      "routes": []
+    },
+    {
+      "name": "Dantooine",
+      "region": "Outer Rim",
+      "sector": "Raioballo",
+      "grid": "L-4",
+      "offset": [
+        50,
+        30
+      ],
+      "famous": "Old Rebel base",
+      "routes": [
+        "Perlemian Trade Route"
+      ]
+    },
+    {
+      "name": "Kessel",
+      "region": "Outer Rim",
+      "sector": "Kessel",
+      "grid": "T-10",
+      "offset": [
+        -10,
+        0
+      ],
+      "famous": "Spice mines",
+      "routes": []
+    },
+    {
+      "name": "Eriadu",
+      "region": "Outer Rim",
+      "sector": "Seswenna",
+      "grid": "M-18",
+      "offset": [
+        -30,
+        0
+      ],
+      "famous": "Tarkin",
+      "routes": [
+        "Hydian Way"
+      ]
+    },
+    {
+      "name": "Kamino",
+      "region": "Outer Rim",
+      "sector": "Timora",
+      "grid": "Q-16",
+      "offset": [
+        50,
+        95
+      ],
+      "famous": "Cloners",
+      "routes": []
+    },
+    {
+      "name": "Rishi",
+      "region": "Outer Rim",
+      "sector": "Tion",
+      "grid": "T-7",
+      "offset": [
+        -40,
+        68
+      ],
+      "famous": "Clone outpost",
+      "routes": []
+    },
+    {
+      "name": "Sullust",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "M-18",
+      "offset": [
+        20,
+        10
+      ],
+      "famous": "Sullustans",
+      "routes": []
+    },
+    {
+      "name": "Mandalore",
+      "region": "Outer Rim",
+      "sector": "Mandalore",
+      "grid": "O-7",
+      "offset": [
+        40,
+        -10
+      ],
+      "famous": "Mandalorians",
+      "routes": [],
+      "featured": true
+    },
+    {
+      "name": "Concordia",
+      "region": "Outer Rim",
+      "sector": "Mandalore",
+      "grid": "O-7",
+      "offset": [
+        66,
+        -10
+      ],
+      "famous": "Mandalore moon",
+      "routes": []
+    },
+    {
+      "name": "Nevarro",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "K-18",
+      "offset": [
+        -80,
+        -10
+      ],
+      "famous": "Bounty Guild",
+      "routes": []
+    },
+    {
+      "name": "Ilum",
+      "region": "Unknown Regions",
+      "sector": "\u2014",
+      "grid": "F-13",
+      "offset": [
+        -24,
+        20
+      ],
+      "famous": "Kyber world (Starkiller)",
+      "routes": [],
+      "featured": true
+    },
+    {
+      "name": "Ahch-To",
+      "region": "Unknown Regions",
+      "sector": "\u2014",
+      "grid": "F-13",
+      "offset": [
+        -20,
+        -80
+      ],
+      "famous": "Luke's exile",
+      "routes": []
+    },
+    {
+      "name": "Exegol",
+      "region": "Unknown Regions",
+      "sector": "\u2014",
+      "grid": "G-6",
+      "offset": [
+        -40,
+        -120
+      ],
+      "famous": "Sith world",
+      "routes": []
+    },
+    {
+      "name": "Jakku",
+      "region": "Unknown Regions",
+      "sector": "\u2014",
+      "grid": "G-15",
+      "offset": [
+        -10,
+        -40
+      ],
+      "famous": "Rey",
+      "routes": []
+    },
+    {
+      "name": "Naboo",
+      "region": "Mid Rim",
+      "sector": "Chommell",
+      "grid": "O-17",
+      "offset": [
+        30,
+        6
+      ],
+      "famous": "Padm\u00e9, Palpatine",
+      "routes": [],
+      "featured": true
+    },
+    {
+      "name": "Rodia",
+      "region": "Outer Rim",
+      "sector": "Tynna",
+      "grid": "O-14",
+      "offset": [
+        70,
+        10
+      ],
+      "famous": "Rodians",
+      "routes": []
+    },
+    {
+      "name": "Toydaria",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "S-12",
+      "offset": [
+        -30,
+        -10
+      ],
+      "famous": "King Katuunko"
+    },
+    {
+      "name": "Batuu",
+      "region": "Outer Rim",
+      "sector": "Trilon",
+      "grid": "G-15",
+      "offset": [
+        30,
+        -10
+      ],
+      "famous": "Black Spire",
+      "routes": []
+    },
+    {
+      "name": "Crait",
+      "region": "Outer Rim",
+      "sector": "Bonn'Yuw-Luq",
+      "grid": "N-17",
+      "offset": [
+        -20,
+        -60
+      ],
+      "famous": "Crystalline world",
+      "routes": []
+    },
+    {
+      "name": "D'Qar",
+      "region": "Outer Rim",
+      "sector": "Sanbra",
+      "grid": "O-17",
+      "offset": [
+        -10,
+        -30
+      ],
+      "famous": "Resistance base",
+      "routes": []
+    },
+    {
+      "name": "Polis Massa",
+      "region": "Outer Rim",
+      "sector": "Anoat",
+      "grid": "K-18",
+      "offset": [
+        -30,
+        40
+      ],
+      "famous": "Birth of Luke & Leia",
+      "routes": []
+    },
+    {
+      "name": "Eadu",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "N-18",
+      "offset": [
+        -10,
+        70
+      ],
+      "famous": "Galen Erso",
+      "routes": []
+    },
+    {
+      "name": "Serenno",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "M-19",
+      "offset": [
+        70,
+        0
+      ],
+      "famous": "Count Dooku",
+      "routes": []
+    },
+    {
+      "name": "Mygeeto",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "R-6",
+      "offset": [
+        30,
+        40
+      ],
+      "famous": "Order 66 on Mygeeto",
+      "routes": []
+    },
+    {
+      "name": "Utapau Minor",
+      "region": "Outer Rim",
+      "sector": "Tarabba",
+      "grid": "M-19",
+      "offset": [
+        60,
+        25
+      ],
+      "famous": "",
+      "routes": []
+    },
+    {
+      "name": "Rattatak",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "R-6",
+      "offset": [
+        -40,
+        -10
+      ],
+      "famous": "Asajj Ventress",
+      "routes": []
+    },
+    {
+      "name": "Jedha",
+      "region": "Mid Rim",
+      "sector": "\u2014",
+      "grid": "Q-6",
+      "offset": [
+        10,
+        -30
+      ],
+      "famous": "Khyber Temple",
+      "routes": []
+    },
+    {
+      "name": "Jedha City",
+      "region": "Mid Rim",
+      "sector": "\u2014",
+      "grid": "Q-6",
+      "offset": [
+        22,
+        -18
+      ],
+      "famous": "",
+      "routes": []
+    },
+    {
+      "name": "Pantora",
+      "region": "Outer Rim",
+      "sector": "\u2014",
+      "grid": "R-6",
+      "offset": [
+        -30,
+        30
+      ],
+      "famous": "Pantorans",
+      "routes": []
+    },
+    {
+      "name": "Ilos",
+      "region": "Mid Rim",
+      "sector": "\u2014",
+      "grid": "P-8",
+      "offset": [
+        40,
+        0
+      ],
+      "famous": "",
+      "routes": []
+    },
+    {
+      "name": "Cato Nemoidia Bridge",
+      "region": "Colonies",
+      "sector": "\u2014",
+      "grid": "N-11",
+      "offset": [
+        -2,
+        28
+      ],
+      "famous": "",
+      "routes": []
+    }
+  ]
+}
