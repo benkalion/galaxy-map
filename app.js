@@ -1,6 +1,6 @@
 
 // v8.1 multi-file — fixed canvas colors, deep zoom, edge labels, route chips, improved popups
-const ROUTES = [{"name": "Perlemian Trade Route", "color": "#ffd166", "pts": [[-100, -80], [0, -40], [80, 0], [140, 60], [200, 120], [260, 180]]}, {"name": "Corellian Run", "color": "#80eaff", "pts": [[20, -40], [120, -30], [180, 40], [220, 120], [260, 140], [320, 180], [420, 180], [500, 260]]}, {"name": "Hydian Way", "color": "#ff7a7a", "pts": [[-200, 480], [-160, 320], [-40, 160], [40, 0], [120, -80], [240, -160]]}, {"name": "Rimma Trade Route", "color": "#9db4ff", "pts": [[-60, 460], [80, 480], [160, 420], [220, 360], [300, 520]]}, {"name": "Corellian Trade Spine", "color": "#9ef1b0", "pts": [[120, -30], [140, 40], [160, 120], [180, 220], [200, 300]]}];
+const DATA = window.__DATA__;
 
 // Colors for CANVAS (explicit hex so canvas understands them)
 const COLORS = {
@@ -43,8 +43,8 @@ const state = {
   maxScale: 20.0,   // and way in
   x: -10, y: 10,
   dragging: false, lx:0, ly:0,
-  planets: [],
-  routes: ROUTES,
+  planets: DATA.planets,
+  routes: DATA.routes,
   selectedRoute: null,
 };
 
@@ -85,9 +85,9 @@ function drawRegion(shape){
   const skew = shape.skew*Math.PI/180;
   for(let a=0;a<=Math.PI*2+0.0001;a+=Math.PI/64){
     const ca=Math.cos(a), sa=Math.sin(a);
-    // Asymmetry: compress left (a≈π), expand right (a≈0)
+    // Asymmetry to match poster: compress west (a≈π), widen east (a≈0)
     const kx = 0.72 + 0.28*(1 + Math.cos(a))/2;  // 0.72..1.0
-    const ky = 0.90 + 0.10*Math.cos(a);          // subtle vertical variation
+    const ky = 0.90 + 0.10*Math.cos(a);          // subtle vertical shaping
     let x = ca*rx*kx + Math.sin(a*3)*shape.wiggle*state.scale;
     let y = sa*ry*ky + Math.cos(a*2)*(shape.wiggle*0.7)*state.scale;
     const sx = x + Math.tan(skew)*y, sy=y;
@@ -308,18 +308,7 @@ function render(){
   Array.from(routesBar.children).forEach((b,i)=> b.classList.toggle('active', state.selectedRoute===i));
 }
 
-
-async function init(){
-  // load planets from external file to keep index.html clean
-  try{
-    const res = await fetch('planets.json', {cache:'no-store'});
-    const json = await res.json();
-    state.planets = json.planets || [];
-  }catch(err){
-    console.error('Failed to load planets.json', err);
-    state.planets = state.planets || [];
-  }
-
+function init(){
   buildRoutesBar();
   renderList();
   render();
@@ -329,17 +318,15 @@ init();
 
 
 function drawRegionLabels(){
-  const shapes = regionShapes();
   ctx.save();
-  const theta = 0; // label on the east side
+  const shapes = regionShapes();
   shapes.forEach(shape=>{
     const name = shape.name;
-    // place label roughly at 0.85 of the ring radius on the east side
-    const rMid = shape.rx * 0.78; // world units
-    const px = tx(rMid), py = ty(0);
+    const px = tx(shape.rx*0.78);  // put label east side at ~0.78 of x-radius
+    const py = ty(0);
     const size = Math.max(12, Math.min(28, 12 + 3*Math.log2(state.scale+1)));
     ctx.font = `bold ${size}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-    ctx.fillStyle = withAlpha('#eef3ff', 0.9);
+    ctx.fillStyle = withAlpha('#eef3ff', 0.92);
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(name.toUpperCase(), px, py);
   });
